@@ -2,20 +2,20 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="flex gap-4">
+    <header className="flex justify-between">
       <h1>
         <Link to="/">Rick & Morty Wiki</Link>
       </h1>
       <nav>
-        <ul className="flex gap-2">
+        <ul className="flex gap-4">
           <li>
-            <Link to="/characters">Characters</Link>
+            <Link to="/character">Characters</Link>
           </li>
           <li>
-            <Link to="/episodes">Episodes</Link>
+            <Link to="/episode">Episodes</Link>
           </li>
           <li>
-            <Link to="/locations">Location</Link>
+            <Link to="/location">Location</Link>
           </li>
         </ul>
       </nav>
