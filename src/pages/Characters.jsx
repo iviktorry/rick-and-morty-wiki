@@ -21,9 +21,11 @@ export default function Characters() {
               {character.species}, {character.gender}, {character.url}{" "}
               {character.created}
             </p>
-            {character.episode.map((episode) => (
-              <p key={episode}>{episode}</p>
-            ))}
+            {/* {character.episode.map((episode) => (
+              <p key={episode} className="w-full">
+                {episode}
+              </p>
+            ))} */}
           </div>
           //  {item.origin}, {item.location},
         ))}

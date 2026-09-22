@@ -5,10 +5,8 @@ import Episodes from "../pages/Episodes";
 import Characters from "../pages/Characters";
 
 export default function Main() {
-  
- 
   return (
-    <main>
+    <main className="mt-4">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/location" element={<Locations />} />
