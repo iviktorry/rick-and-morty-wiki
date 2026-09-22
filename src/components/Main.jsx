@@ -6,7 +6,7 @@ import Characters from "../pages/Characters";
 
 export default function Main() {
   return (
-    <main className="mt-4">
+    <main className="px-4 pb-4">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/location" element={<Locations />} />
