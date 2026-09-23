@@ -2,5 +2,9 @@
 
 @theme {
   --font-custom: "Ubuntu", sans-serif;
-}
 
+  --color-blue-600: #40448e;
+  --color-orange-100: #eee6ce;
+  --color-orange-700: #c34c22;
+  --color-lime-600: #6f9f3f;
+}

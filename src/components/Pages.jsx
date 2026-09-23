@@ -15,9 +15,9 @@ export default function Pages({ pages, setCurrentPage, currentPage }) {
     (_, index) => startPage + index,
   );
   const style =
-    "hover:scale-117 ring-neutral-800 transition-all duration-200 ease-linear disabled:opacity-50 disabled:hover:scale-100";
+    "hover:scale-117 rounded-full ring-neutral-800 transition-all duration-200 ease-linear disabled:opacity-50 disabled:hover:scale-100";
   return (
-    <section className="flex flex-wrap justify-center gap-3 md:gap-6">
+    <section className="flex flex-wrap justify-center md:gap-6">
       <button
         disabled={currentPage === 1}
         onClick={() => setCurrentPage((prev) => prev - 1)}
@@ -28,7 +28,10 @@ export default function Pages({ pages, setCurrentPage, currentPage }) {
 
       {startPage > 1 && (
         <>
-          <button className={`${style}`} onClick={() => setCurrentPage(1)}>
+          <button
+            className={`size-8 ring-2 ${style}`}
+            onClick={() => setCurrentPage(1)}
+          >
             1
           </button>
           {startPage > 2 && <span>...</span>}
