@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Characters() {
+export default function Characters({ filterText }) {
   const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
@@ -9,9 +9,13 @@ export default function Characters() {
       .then((res) => setCharacters(res.results));
   }, []);
 
+  const filteredArray = characters.filter((character) =>
+    character.name.toLowerCase().includes(filterText.toLowerCase()),
+  );
+
   return (
-    <section className="grid w-fit grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-      {characters.map((character) => (
+    <section className="grid w-fit grid-cols-1 gap-5 self-end sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      {filteredArray.map((character) => (
         <div
           key={character.id}
           className="aspect-3/5 max-w-75 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-300 ease-linear hover:scale-101"
@@ -40,10 +44,10 @@ export default function Characters() {
               <span className="text-xl font-medium">{character.name}</span>-
               <span>{character.gender}</span>
             </p>
-            <span className="text-xs text-neutral-600">Is from:</span>
+            <span className="text-xs text-neutral-600">Is from</span>
             <span className="pb-2">{character.origin.name}</span>
             <span className="text-xs text-neutral-600">
-              Last known location:
+              Last known location
             </span>
             <span>{character.location.name}</span>
           </div>
