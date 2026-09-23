@@ -9,7 +9,7 @@ export default function Episodes() {
       .then((res) => setEpisodes(res.results));
   }, []);
   return (
-    <div>
+    <section>
       <p>episodes</p>
       {episodes.map((episode) => (
         <div key={episode.id}>
@@ -22,6 +22,6 @@ export default function Episodes() {
           ))}
         </div>
       ))}
-    </div>
+    </section>
   );
 }

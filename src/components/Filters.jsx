@@ -2,7 +2,7 @@ import FilterButton from "./FilterButton";
 
 export default function Filters() {
   return (
-    <div className="w-full md:max-w-2xl lg:w-sm">
+    <aside className="w-full md:max-w-2xl lg:w-sm">
       <p className="text-xl font-medium">Filters</p>
       <div className="mt-2 rounded-lg">
         <details className="border-b-2 border-neutral-800 py-2">
@@ -30,6 +30,6 @@ export default function Filters() {
           </div>
         </details>
       </div>
-    </div>
+    </aside>
   );
 }

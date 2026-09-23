@@ -9,7 +9,7 @@ export default function Locations() {
       .then((res) => setLocations(res.results));
   }, []);
   return (
-    <div>
+    <section>
       <p>locations</p>
       {locations.map((location) => (
         <div key={location.id}>
@@ -22,6 +22,6 @@ export default function Locations() {
           ))}
         </div>
       ))}
-    </div>
+    </section>
   );
 }
