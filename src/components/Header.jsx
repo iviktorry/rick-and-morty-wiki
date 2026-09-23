@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="flex justify-between px-4">
+    <header className="flex justify-between px-4 pt-4">
       <h1>
         <Link to="/">Rick & Morty Wiki</Link>
       </h1>
