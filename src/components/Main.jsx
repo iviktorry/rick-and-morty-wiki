@@ -3,8 +3,6 @@ import Home from "../pages/Home";
 import Locations from "../pages/Locations";
 import Episodes from "../pages/Episodes";
 import Characters from "../pages/Characters";
-import SearchBar from "../components/SearchBar";
-import Filters from "../components/Filters";
 import { useState } from "react";
 
 export default function Main() {
@@ -19,15 +17,18 @@ export default function Main() {
   }
   return (
     <main className="flex flex-col items-center gap-4 px-4 pb-4 lg:gap-8 lg:pb-6">
-      <SearchBar handleSearch={handleSearch} />
-      <Filters />
       <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
         <div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
               path="/character"
-              element={<Characters filterText={filterText} />}
+              element={
+                <Characters
+                  filterText={filterText}
+                  handleSearch={handleSearch}
+                />
+              }
             />
             <Route path="/location" element={<Locations />} />
             <Route path="/episode" element={<Episodes />} />
