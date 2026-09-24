@@ -34,7 +34,7 @@ export default function Characters({ filterText }) {
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 lg:self-end xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4">
         {filteredArray.map((character) => (
           <Character
             key={character.id}

@@ -8,12 +8,12 @@ export default function Character({
   character,
 }) {
   return (
-    <div className="aspect-3/5 max-w-75 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
-      <div className="relative w-full">
+    <div className="aspect-3/5 min-w-0 w-75 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
+      <div className="relative size-75 w-full min-w-0 border-b-2 border-neutral-800">
         <img
           src={image}
-          alt={`${character}'s portrait image`}
-          className="size-full border-b-2 border-neutral-800 object-cover"
+          alt={`${character.name}'s portrait image`}
+          className="size-full object-cover"
         />
 
         <span

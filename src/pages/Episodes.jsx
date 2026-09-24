@@ -1,27 +1,77 @@
 import { useEffect, useState } from "react";
+import Pages from "../components/Pages";
+import Character from "../components/Character";
+
+function EpisodeCard({ episode }) {
+  const [characters, setCharacters] = useState([]);
+
+  useEffect(() => {
+    const characterIds = episode.characters
+      .map((url) => url.split("/").pop())
+      .filter(Boolean);
+
+    if (characterIds === 0) {
+      return;
+    }
+
+    fetch(`https://rickandmortyapi.com/api/character/${characterIds.join(",")}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setCharacters(Array.isArray(res) ? res : [res]);
+      })
+      .catch((error) => console.error(error));
+  }, [episode.characters]);
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-lg font-medium">
+        {episode.episode}: {episode.name}
+      </p>
+      <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 lg:self-end xl:grid-cols-3 2xl:grid-cols-4">
+        {characters.map((character) => (
+          <Character
+            key={character.id}
+            id={character.id}
+            image={character.image}
+            character={character}
+            status={character.status}
+            gender={character.gender}
+            name={character.name}
+            species={character.species}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Episodes() {
   const [episodes, setEpisodes] = useState([]);
+  const [pages, setPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetch(`https://rickandmortyapi.com/api/episode`)
-      .then((res) => res.json())
-      .then((res) => setEpisodes(res.results));
-  }, []);
+    fetch(`https://rickandmortyapi.com/api/episode?page=${currentPage}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`server mistake: ${res.status}`);
+        return res.json();
+      })
+      .then((res) => {
+        setEpisodes(res.results);
+        setPages(res.info.pages);
+      });
+  }, [currentPage]);
   return (
-    <section>
-      <p>episodes</p>
+    <section className="flex flex-col gap-10">
       {episodes.map((episode) => (
-        <div key={episode.id}>
-          <p>
-            {episode.episode}, {episode.name}, {episode.air_date}, {episode.url}
-            , {episode.created}
-          </p>
-          {episode.characters.map((character) => (
-            <p key={character}>{character}</p>
-          ))}
-        </div>
+        <EpisodeCard key={episode.id} episode={episode} />
       ))}
+
+      <Pages
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pages={pages}
+      />
     </section>
   );
 }

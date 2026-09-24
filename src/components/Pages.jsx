@@ -17,7 +17,7 @@ export default function Pages({ pages, setCurrentPage, currentPage }) {
   const style =
     "hover:scale-117 rounded-full ring-neutral-800 transition-all duration-200 ease-linear disabled:opacity-50 disabled:hover:scale-100";
   return (
-    <section className="flex flex-wrap justify-center md:gap-6">
+    <section className="flex flex-wrap gap-2 justify-center md:gap-6">
       <button
         disabled={currentPage === 1}
         onClick={() => setCurrentPage((prev) => prev - 1)}
