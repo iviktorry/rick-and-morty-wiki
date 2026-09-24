@@ -18,11 +18,10 @@ export default function Main() {
     setFilterText(search);
   }
   return (
-    <main className="flex flex-col gap-4 px-4 pb-4 lg:gap-8 lg:pb-6">
+    <main className="flex flex-col gap-4 px-4 pb-4 items-center lg:gap-8 lg:pb-6">
       <SearchBar handleSearch={handleSearch} />
+      <Filters />
       <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-        <Filters />
-
         <div>
           <Routes>
             <Route path="/" element={<Home />} />

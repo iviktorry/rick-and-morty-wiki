@@ -12,10 +12,10 @@ export default function Header() {
             <Link to="/character">Characters</Link>
           </li>
           <li>
-            <Link to="/episode">Episodes</Link>
+            <Link to="/location">Location</Link>
           </li>
           <li>
-            <Link to="/location">Location</Link>
+            <Link to="/episode">Episodes</Link>
           </li>
         </ul>
       </nav>
