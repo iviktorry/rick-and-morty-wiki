@@ -56,7 +56,6 @@ export default function Locations() {
   }, [currentPage]);
   return (
     <section className="flex flex-col gap-10">
-      <p>locations</p>
       {locations.map((location) => (
         <LocationCard key={location.id} location={location} />
       ))}

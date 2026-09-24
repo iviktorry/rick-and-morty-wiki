@@ -35,7 +35,7 @@ export default function Characters({ filterText, handleSearch }) {
   );
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-2 md:gap-4">
       <Filters />
       <SearchBar handleSearch={handleSearch} />
 

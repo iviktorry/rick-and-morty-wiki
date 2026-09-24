@@ -26,7 +26,7 @@ export default function Character({
         >
           {gender}
         </span>
-        <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-lg bg-neutral-600 px-2 leading-tight text-neutral-100 ring-2 ring-neutral-800">
+        <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 rounded-lg bg-neutral-600 px-2 leading-tight text-neutral-100 ring-2 ring-neutral-800">
           {id}
         </span>
       </div>

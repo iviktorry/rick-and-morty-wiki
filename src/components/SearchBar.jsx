@@ -4,9 +4,9 @@ export default function SearchBar({ handleSearch }) {
   return (
     <form
       onSubmit={handleSearch}
-      className="relative mx-auto flex w-full gap-2 md:w-2xl"
+      className="relative mx-auto flex w-full gap-3 pb-4 md:w-2xl"
     >
-      <Search className="absolute top-1 left-1" />
+      <Search className="absolute top-1 left-1 text-neutral-600" />
       <input
         type="text"
         name="search"
