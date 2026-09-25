@@ -25,7 +25,7 @@ function EpisodeCard({ episode }) {
   }, [episode.characters]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-1 flex-col items-center gap-4">
       <p className="text-lg font-medium">
         {episode.episode}: {episode.name}
       </p>
@@ -37,12 +37,14 @@ function EpisodeCard({ episode }) {
             <Character
               key={character.id}
               id={character.id}
-              image={character.image}
-              character={character}
+              name={character.name}
               status={character.status}
               gender={character.gender}
-              name={character.name}
               species={character.species}
+              character={character}
+              image={character.image}
+              origin={character.origin.name}
+              location={character.location.name}
             />
           ))
         ) : (
@@ -83,7 +85,7 @@ export default function Episodes() {
     filter !== "" ? episode.name === filter : episode,
   );
   return (
-    <section className="flex flex-col gap-10">
+    <section className="flex items-center flex-1 flex-col gap-10">
       <Filters>
         <FilterOption
           label="Choose an episode"
@@ -92,11 +94,7 @@ export default function Episodes() {
         />
       </Filters>
       {filteredEpisodes.map((episode) => (
-        <EpisodeCard
-          key={episode.id}
-          episode={episode}
-          handleChange={handleChange}
-        />
+        <EpisodeCard key={episode.id} episode={episode} />
       ))}
 
       <Pages
