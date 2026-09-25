@@ -3,38 +3,16 @@ import Home from "../pages/Home";
 import Locations from "../pages/Locations";
 import Episodes from "../pages/Episodes";
 import Characters from "../pages/Characters";
-import { useState } from "react";
 
 export default function Main() {
-  const [filterText, setFilterText] = useState("");
-
-  function handleSearch(event) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const search = formData.get("search");
-    setFilterText(search);
-  }
   return (
-    <main className="flex flex-col items-center gap-4 px-4 pb-4 lg:gap-8 lg:pb-6">
-      <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/character"
-              element={
-                <Characters
-                  filterText={filterText}
-                  handleSearch={handleSearch}
-                />
-              }
-            />
-            <Route path="/location" element={<Locations />} />
-            <Route path="/episode" element={<Episodes />} />
-          </Routes>
-        </div>
-      </div>
+    <main className="flex flex-1 h-full flex-col items-center gap-4 px-4 pb-4 lg:gap-8 lg:pb-6">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/character" element={<Characters />} />
+        <Route path="/location" element={<Locations />} />
+        <Route path="/episode" element={<Episodes />} />
+      </Routes>
     </main>
   );
 }

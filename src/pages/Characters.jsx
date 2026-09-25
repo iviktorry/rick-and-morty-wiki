@@ -5,10 +5,22 @@ import SearchBar from "../components/SearchBar";
 import Filters from "../components/Filters";
 import FilterOption from "../components/FilterOption";
 
-export default function Characters({ filterText, handleSearch }) {
+export default function Characters() {
   const [characters, setCharacters] = useState([]);
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("");
+  const [gender, setGender] = useState("");
+  const [species, setSpecies] = useState("");
+
+  function handleSearch(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const search = formData.get("search");
+    setSearchText(search);
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -31,17 +43,34 @@ export default function Characters({ filterText, handleSearch }) {
     return () => controller.abort();
   }, [currentPage]);
 
-  const filteredArray = characters.filter((character) =>
-    character.name.toLowerCase().includes(filterText.toLowerCase()),
-  );
+  const filteredCharacters = characters.filter((character) => {
+    const matchesSpecies =
+      species !== "" ? character.species === species : character;
+    const matchesGender =
+      gender !== "" ? character.gender === gender : character;
+    const matchesStatus =
+      status !== "" ? character.status === status : character;
+
+    const matcherSearch =
+      searchText !== ""
+        ? character.name.toLowerCase().includes(searchText.toLowerCase())
+        : character;
+
+    return matchesSpecies && matcherSearch && matchesGender && matchesStatus;
+  });
 
   return (
-    <section className="flex flex-col gap-2 md:gap-4">
+    <section className="flex min-h-full flex-1 flex-col gap-2 md:gap-4">
       <Filters>
-        <FilterOption label="Status" options={["Alive", "Dead", "unknown"]} />
+        <FilterOption
+          label="Status"
+          options={["Alive", "Dead", "unknown"]}
+          handleChange={setStatus}
+        />
         <FilterOption
           label="Gender"
           options={["Male", "Female", "Genderless", "unknown"]}
+          handleChange={setGender}
         />
         <FilterOption
           label="Species"
@@ -52,23 +81,32 @@ export default function Characters({ filterText, handleSearch }) {
             "Poopybutthole",
             "Mythological Creature",
           ]}
+          handleChange={setSpecies}
         />
       </Filters>
       <SearchBar handleSearch={handleSearch} />
 
-      <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {filteredArray.map((character) => (
-          <Character
-            key={character.id}
-            id={character.id}
-            image={character.image}
-            character={character}
-            status={character.status}
-            gender={character.gender}
-            name={character.name}
-            species={character.species}
-          />
-        ))}
+      <div
+        className={`${filteredCharacters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "flex-1"}`}
+      >
+        {filteredCharacters.length ? (
+          filteredCharacters.map((character) => (
+            <Character
+              key={character.id}
+              id={character.id}
+              image={character.image}
+              character={character}
+              status={character.status}
+              gender={character.gender}
+              name={character.name}
+              species={character.species}
+            />
+          ))
+        ) : (
+          <p className="text-center">
+            Sorry, nothing was found on your search.
+          </p>
+        )}
       </div>
       <Pages
         pages={pages}

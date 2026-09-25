@@ -5,4 +5,3 @@ export default function Filters({ children }) {
     </div>
   );
 }
-// фильтры так чтобы выводился массив на локациях и эпизодах
