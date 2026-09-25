@@ -25,19 +25,27 @@ export function LocationCard({ location }) {
       <p className="text-lg font-medium">
         {location.name}: {location.type}
       </p>
-      <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {characters.map((character) => (
-          <Character
-            key={character.id}
-            id={character.id}
-            image={character.image}
-            character={character}
-            status={character.status}
-            gender={character.gender}
-            name={character.name}
-            species={character.species}
-          />
-        ))}
+      <div
+        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "flex-1"}`}
+      >
+        {characters.length ? (
+          characters.map((character) => (
+            <Character
+              key={character.id}
+              id={character.id}
+              image={character.image}
+              character={character}
+              status={character.status}
+              gender={character.gender}
+              name={character.name}
+              species={character.species}
+            />
+          ))
+        ) : (
+          <p className="text-center">
+            Sorry, nothing was found on your search.
+          </p>
+        )}
       </div>
     </div>
   );
