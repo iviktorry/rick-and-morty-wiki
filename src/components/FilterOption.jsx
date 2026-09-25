@@ -1,22 +1,26 @@
-export default function FilterOption({ label, option1, option2, option3 }) {
+export default function FilterOption({
+  label,
+  options = [],
+  value,
+  handleChange,
+}) {
   return (
-    <div className="flex gap-3">
-      <label htmlFor={label}>{label}</label>
+    <>
       <select
         name={label}
         id={label}
-        className="rounded-lg px-2 py-1 ring-2 ring-neutral-800"
+        value={value}
+        onChange={(e) => handleChange(e.target.value)}
+
+        className="w-fit py-1"
       >
-        <option className="w-fit" value={option1}>
-          {option1}
-        </option>
-        <option className="w-fit" value={option2}>
-          {option2}
-        </option>
-        <option className="w-fit" value={option3}>
-          {option3}
-        </option>
+        <option value="">{label}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
       </select>
-    </div>
+    </>
   );
 }

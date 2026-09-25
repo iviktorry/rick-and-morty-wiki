@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Pages from "../components/Pages";
 import Character from "../components/Character";
+import Filters from "../components/Filters";
+import FilterOption from "../components/FilterOption";
 
 export function LocationCard({ location }) {
   const [characters, setCharacters] = useState([]);
@@ -45,6 +47,7 @@ export default function Locations() {
   const [locations, setLocations] = useState([]);
   const [pages, setPages] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     fetch(`https://rickandmortyapi.com/api/location?page=${currentPage}`)
@@ -54,9 +57,25 @@ export default function Locations() {
       })
       .then((res) => setLocations(res.results));
   }, [currentPage]);
+
+  const names = locations.map((location) => location.name);
+
+  function handleChange(value) {
+    setFilter(value);
+  }
+  const filteredLocations = locations.filter((location) =>
+    filter !== "" ? location.name === filter : location,
+  );
   return (
     <section className="flex flex-col gap-10">
-      {locations.map((location) => (
+      <Filters>
+        <FilterOption
+          label="Choose location"
+          options={names}
+          handleChange={handleChange}
+        />
+      </Filters>
+      {filteredLocations.map((location) => (
         <LocationCard key={location.id} location={location} />
       ))}
       <Pages

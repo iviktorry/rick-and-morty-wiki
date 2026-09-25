@@ -3,6 +3,7 @@ import Pages from "../components/Pages";
 import Character from "../components/Character";
 import SearchBar from "../components/SearchBar";
 import Filters from "../components/Filters";
+import FilterOption from "../components/FilterOption";
 
 export default function Characters({ filterText, handleSearch }) {
   const [characters, setCharacters] = useState([]);
@@ -36,7 +37,23 @@ export default function Characters({ filterText, handleSearch }) {
 
   return (
     <section className="flex flex-col gap-2 md:gap-4">
-      <Filters />
+      <Filters>
+        <FilterOption label="Status" options={["Alive", "Dead", "unknown"]} />
+        <FilterOption
+          label="Gender"
+          options={["Male", "Female", "Genderless", "unknown"]}
+        />
+        <FilterOption
+          label="Species"
+          options={[
+            "Human",
+            "Alien",
+            "Humanoid",
+            "Poopybutthole",
+            "Mythological Creature",
+          ]}
+        />
+      </Filters>
       <SearchBar handleSearch={handleSearch} />
 
       <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">

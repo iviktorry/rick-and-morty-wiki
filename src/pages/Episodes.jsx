@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Pages from "../components/Pages";
 import Character from "../components/Character";
+import FilterOption from "../components/FilterOption";
+import Filters from "../components/Filters";
 
 function EpisodeCard({ episode }) {
   const [characters, setCharacters] = useState([]);
@@ -49,6 +51,7 @@ export default function Episodes() {
   const [episodes, setEpisodes] = useState([]);
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     fetch(`https://rickandmortyapi.com/api/episode?page=${currentPage}`)
@@ -61,10 +64,31 @@ export default function Episodes() {
         setPages(res.info.pages);
       });
   }, [currentPage]);
+
+  const names = episodes.map((episode) => episode.name);
+
+  function handleChange(value) {
+    setFilter(value);
+  }
+
+  const filteredEpisodes = episodes.filter((episode) =>
+    filter !== "" ? episode.name === filter : episode,
+  );
   return (
     <section className="flex flex-col gap-10">
-      {episodes.map((episode) => (
-        <EpisodeCard key={episode.id} episode={episode} />
+      <Filters>
+        <FilterOption
+          label="Choose an episode"
+          options={names}
+          handleChange={handleChange}
+        />
+      </Filters>
+      {filteredEpisodes.map((episode) => (
+        <EpisodeCard
+          key={episode.id}
+          episode={episode}
+          handleChange={handleChange}
+        />
       ))}
 
       <Pages
