@@ -21,7 +21,7 @@ export function LocationCard({ location }) {
   }, [location.residents]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-1 flex-col items-center gap-4">
       <p className="text-lg font-medium">
         {location.name}: {location.type}
       </p>
@@ -55,17 +55,20 @@ export function LocationCard({ location }) {
 
 export default function Locations() {
   const [locations, setLocations] = useState([]);
-  const [pages, setPages] = useState(null);
+  const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
     fetch(`https://rickandmortyapi.com/api/location?page=${currentPage}`)
       .then((res) => {
-        if (!res.ok) throw new Error(`server error: ${res.status}`); //???
+        if (!res.ok) throw new Error(`server error: ${res.status}`);
         return res.json();
       })
-      .then((res) => setLocations(res.results));
+      .then((res) => {
+        setLocations(res.results);
+        setPages(res.info.pages);
+      });
   }, [currentPage]);
 
   const names = locations.map((location) => location.name);
@@ -73,11 +76,12 @@ export default function Locations() {
   function handleChange(value) {
     setFilter(value);
   }
+
   const filteredLocations = locations.filter((location) =>
     filter !== "" ? location.name === filter : location,
   );
   return (
-    <section className="flex flex-col gap-10">
+    <section className="flex items-center flex-1 flex-col gap-10">
       <Filters>
         <FilterOption
           label="Choose location"
@@ -85,13 +89,15 @@ export default function Locations() {
           handleChange={handleChange}
         />
       </Filters>
+
       {filteredLocations.map((location) => (
         <LocationCard key={location.id} location={location} />
       ))}
+
       <Pages
-        pages={pages}
+        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        setPages={setPages}
+        pages={pages}
       />
     </section>
   );
