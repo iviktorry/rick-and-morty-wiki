@@ -60,7 +60,8 @@ export default function Characters() {
   });
 
   return (
-    <section className="flex min-h-full flex-1 flex-col gap-2 md:gap-4">
+    <section className="flex flex-1 flex-col items-center gap-6">
+      <SearchBar handleSearch={handleSearch} />
       <Filters>
         <FilterOption
           label="Status"
@@ -84,7 +85,6 @@ export default function Characters() {
           handleChange={setSpecies}
         />
       </Filters>
-      <SearchBar handleSearch={handleSearch} />
 
       <div
         className={`${filteredCharacters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "flex-1"}`}
@@ -94,18 +94,18 @@ export default function Characters() {
             <Character
               key={character.id}
               id={character.id}
-              image={character.image}
-              character={character}
+              name={character.name}
               status={character.status}
               gender={character.gender}
-              name={character.name}
               species={character.species}
+              character={character}
+              image={character.image}
+              origin={character.origin.name}
+              location={character.location.name}
             />
           ))
         ) : (
-          <p className="text-center">
-            Sorry, nothing was found on your search.
-          </p>
+          <p className="text-center">Nothing was found on your search.</p>
         )}
       </div>
       <Pages

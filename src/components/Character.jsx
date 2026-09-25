@@ -6,13 +6,15 @@ export default function Character({
   name,
   species,
   character,
+  origin,
+  location,
 }) {
   return (
-    <div className="aspect-3/5 min-w-0 w-75 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
+    <div className="aspect-3/5 w-75 min-w-0 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
       <div className="relative size-75 w-full min-w-0 border-b-2 border-neutral-800">
         <img
           src={image}
-          alt={`${character.name}'s portrait image`}
+          alt={`${name}'s portrait image`}
           className="size-full object-cover"
         />
 
@@ -35,11 +37,15 @@ export default function Character({
           {name}
         </span>
         <span>{species}</span>
+        <span className="pt-2 text-xs text-neutral-600">Originated</span>
+        <span className="line-clamp-1" title={origin}>
+          {origin}
+        </span>
         <span className="pt-2 text-xs text-neutral-600">
           Last known location
         </span>
-        <span className="line-clamp-1" title={character.location.name}>
-          {character.location.name}
+        <span className="line-clamp-1" title={location}>
+          {location}
         </span>
       </div>
     </div>

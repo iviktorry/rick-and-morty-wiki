@@ -33,17 +33,19 @@ export function LocationCard({ location }) {
             <Character
               key={character.id}
               id={character.id}
-              image={character.image}
-              character={character}
+              name={character.name}
               status={character.status}
               gender={character.gender}
-              name={character.name}
               species={character.species}
+              character={character}
+              image={character.image}
+              origin={character.origin.name}
+              location={character.location.name}
             />
           ))
         ) : (
           <p className="text-center">
-            Sorry, nothing was found on your search.
+            There are no residents on this location.
           </p>
         )}
       </div>

@@ -47,7 +47,7 @@ function EpisodeCard({ episode }) {
           ))
         ) : (
           <p className="text-center">
-            Sorry, nothing was found on your search.
+            There are no characters in this episode.
           </p>
         )}
       </div>
