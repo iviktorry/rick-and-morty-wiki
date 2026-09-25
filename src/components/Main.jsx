@@ -6,7 +6,7 @@ import Characters from "../pages/Characters";
 
 export default function Main() {
   return (
-    <main className="flex flex-1 h-full flex-col items-center gap-4 px-4 pb-4 lg:gap-8 lg:pb-6">
+    <main className="flex h-full flex-1 flex-col items-center gap-4 pb-4 lg:gap-8 lg:pb-6">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/character" element={<Characters />} />

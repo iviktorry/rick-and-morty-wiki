@@ -30,7 +30,7 @@ function EpisodeCard({ episode }) {
         {episode.episode}: {episode.name}
       </p>
       <div
-        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : "flex-1"}`}
+        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
       >
         {characters.length ? (
           characters.map((character) => (
@@ -85,7 +85,7 @@ export default function Episodes() {
     filter !== "" ? episode.name === filter : episode,
   );
   return (
-    <section className="flex items-center flex-1 flex-col gap-10">
+    <section className="flex flex-1 flex-col items-center gap-10">
       <Filters>
         <FilterOption
           label="Choose an episode"
