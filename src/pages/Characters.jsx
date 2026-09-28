@@ -13,6 +13,7 @@ export default function Characters() {
   const [status, setStatus] = useState("");
   const [gender, setGender] = useState("");
   const [species, setSpecies] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleSearch(event) {
     event.preventDefault();
@@ -22,8 +23,14 @@ export default function Characters() {
     setSearchText(search);
   }
 
+  function handlePageChange(newPage) {
+    setIsLoading(true);
+    setCurrentPage(newPage);
+  }
+
   useEffect(() => {
     const controller = new AbortController();
+
     fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}`, {
       signal: controller.signal,
     })
@@ -39,7 +46,13 @@ export default function Characters() {
         if (error.name !== "AbortError") {
           console.error(`Uploading error: ${error}`);
         }
+      })
+      .finally(() => {
+        if (!controller.signal.aborter) {
+          setIsLoading(false);
+        }
       });
+
     return () => controller.abort();
   }, [currentPage]);
 
@@ -111,7 +124,8 @@ export default function Characters() {
       <Pages
         pages={pages}
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        isLoading={isLoading}
+        handlePageChange={handlePageChange}
       />
     </section>
   );

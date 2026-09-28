@@ -8,20 +8,32 @@ function EpisodeCard({ episode }) {
   const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const characterIds = episode.characters
       .map((url) => url.split("/").pop())
       .filter(Boolean);
 
-    if (characterIds === 0) {
-      return;
-    }
+    if (!characterIds || characterIds.length === 0) return;
 
-    fetch(`https://rickandmortyapi.com/api/character/${characterIds.join(",")}`)
-      .then((res) => res.json())
+    fetch(
+      `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
+      { signal: controller.signal },
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
+        return res.json();
+      })
       .then((res) => {
         setCharacters(Array.isArray(res) ? res : [res]);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(`Fetch error ${error}`);
+        }
+      });
+
+    return () => controller.abort();
   }, [episode.characters]);
 
   return (
@@ -62,17 +74,39 @@ export default function Episodes() {
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handlePageChange(newPage) {
+    setIsLoading(true);
+    setCurrentPage(newPage);
+  }
 
   useEffect(() => {
-    fetch(`https://rickandmortyapi.com/api/episode?page=${currentPage}`)
+    const controller = new AbortController();
+
+    fetch(`https://rickandmortyapi.com/api/episode?page=${currentPage}`, {
+      signal: controller.signal,
+    })
       .then((res) => {
-        if (!res.ok) throw new Error(`server mistake: ${res.status}`);
+        if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
         return res.json();
       })
       .then((res) => {
         setEpisodes(res.results);
         setPages(res.info.pages);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(`Fetch error: ${error}`);
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborter) {
+          setIsLoading(false);
+        }
       });
+
+    return () => controller.abort();
   }, [currentPage]);
 
   const names = episodes.map((episode) => episode.name);
@@ -98,9 +132,10 @@ export default function Episodes() {
       ))}
 
       <Pages
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
         pages={pages}
+        currentPage={currentPage}
+        isLoading={isLoading}
+        handlePageChange={handlePageChange}
       />
     </section>
   );

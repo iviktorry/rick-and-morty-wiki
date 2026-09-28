@@ -6,18 +6,34 @@ import FilterOption from "../components/FilterOption";
 
 export function LocationCard({ location }) {
   const [characters, setCharacters] = useState([]);
+
   useEffect(() => {
+    const controller = new AbortController();
+
     const characterIds = location.residents
       .map((url) => url.split("/").pop())
       .filter(Boolean);
 
-    if (characterIds.length === 0) return;
+    if (!characterIds || characterIds.length === 0) return;
 
-    fetch(`https://rickandmortyapi.com/api/character/${characterIds.join(",")}`)
-      .then((res) => res.json())
+    fetch(
+      `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
+      { signal: controller.signal },
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
+        return res.json();
+      })
       .then((res) => {
         setCharacters(Array.isArray(res) ? res : [res]);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(`Fetch error: ${error}`);
+        }
       });
+
+    return () => controller.abort();
   }, [location.residents]);
 
   return (
@@ -58,9 +74,19 @@ export default function Locations() {
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handlePageChange(newPage) {
+    setIsLoading(true);
+    setCurrentPage(newPage);
+  }
 
   useEffect(() => {
-    fetch(`https://rickandmortyapi.com/api/location?page=${currentPage}`)
+    const controller = new AbortController();
+
+    fetch(`https://rickandmortyapi.com/api/location?page=${currentPage}`, {
+      signal: controller.signal,
+    })
       .then((res) => {
         if (!res.ok) throw new Error(`server error: ${res.status}`);
         return res.json();
@@ -68,7 +94,19 @@ export default function Locations() {
       .then((res) => {
         setLocations(res.results);
         setPages(res.info.pages);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(`Fetch error: ${error}`);
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborter) {
+          setIsLoading(false);
+        }
       });
+
+    return () => controller.abort();
   }, [currentPage]);
 
   const names = locations.map((location) => location.name);
@@ -95,9 +133,10 @@ export default function Locations() {
       ))}
 
       <Pages
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
         pages={pages}
+        currentPage={currentPage}
+        isLoading={isLoading}
+        handlePageChange={handlePageChange}
       />
     </section>
   );
