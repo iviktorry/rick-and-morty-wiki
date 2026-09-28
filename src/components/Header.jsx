@@ -5,7 +5,7 @@ export default function Header() {
     return `transition-all duration-300 ease-linear md:hover:font-bold ${isActive ? "font-bold text-lg" : ""} `;
   }
   return (
-    <header className="flex flex-col items-center justify-between pt-2 sm:flex-row">
+    <header className="flex flex-col items-center justify-between gap-2 pt-2 sm:flex-row sm:gap-0">
       <h1>
         <NavLink to="/" className={navLinkStyles}>
           Rick and Morty Wiki
@@ -14,17 +14,17 @@ export default function Header() {
       <nav>
         <ul className="flex flex-row items-center justify-between gap-4 sm:w-xs">
           <li>
-            <NavLink to="/character" className={navLinkStyles}>
+            <NavLink to="/characters" className={navLinkStyles}>
               Characters
             </NavLink>
           </li>
           <li>
-            <NavLink to="/location" className={navLinkStyles}>
+            <NavLink to="/locations" className={navLinkStyles}>
               Location
             </NavLink>
           </li>
           <li>
-            <NavLink to="/episode" className={navLinkStyles}>
+            <NavLink to="/episodes" className={navLinkStyles}>
               Episodes
             </NavLink>
           </li>
