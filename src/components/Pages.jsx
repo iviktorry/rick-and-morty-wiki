@@ -5,7 +5,7 @@ export default function Pages({
   handlePageChange,
 }) {
   if (pages <= 1) return null;
-  const maxVisibleButtons = 10;
+  const maxVisibleButtons = 5;
 
   let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
   let endPage = startPage + maxVisibleButtons - 1;
@@ -20,9 +20,9 @@ export default function Pages({
     (_, index) => startPage + index,
   );
   const style =
-    "hover:scale-117 focus:scale-117 rounded-full ring-neutral-800 transition-all duration-200 ease-linear disabled:opacity-50 disabled:hover:scale-100";
+    "hover:scale-120 focus:scale-120 rounded-full ring-neutral-800 transition-all duration-200 ease-linear disabled:opacity-50 disabled:hover:scale-100";
   return (
-    <section className="flex flex-1 flex-wrap items-end justify-center gap-2 md:gap-6">
+    <section className="mt-auto flex items-center justify-center gap-2">
       <button
         disabled={isLoading || currentPage === 1}
         onClick={() => handlePageChange(currentPage - 1)}
@@ -35,7 +35,7 @@ export default function Pages({
         <>
           <button
             disabled={isLoading}
-            className={`size-8 ring-2 ${style}`}
+            className={`size-6 items-center justify-center sm:size-8 ${style}`}
             onClick={() => handlePageChange(1)}
           >
             1
@@ -48,7 +48,7 @@ export default function Pages({
           key={page}
           disabled={isLoading}
           onClick={() => handlePageChange(page)}
-          className={`size-8 rounded-full ring-2 ${style} ${currentPage === page ? "scale-112 text-xl font-medium" : null}`}
+          className={`flex size-6 items-center justify-center rounded-full sm:size-8 ${style} ${currentPage === page ? "scale-113 text-xl font-semibold" : null}`}
         >
           {page}
         </button>
