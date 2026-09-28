@@ -37,7 +37,7 @@ export function LocationCard({ location }) {
   }, [location.residents]);
 
   return (
-    <div className="flex flex-1 flex-col items-center gap-4">
+    <div className="flex flex-1 flex-col items-center gap-4 text-center">
       <p className="text-lg font-medium">
         {location.name}: {location.type}
       </p>
@@ -60,9 +60,7 @@ export function LocationCard({ location }) {
             />
           ))
         ) : (
-          <p className="text-center">
-            There are no residents on this location.
-          </p>
+          <p>There are no residents on this location.</p>
         )}
       </div>
     </div>

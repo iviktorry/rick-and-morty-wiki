@@ -37,7 +37,7 @@ function EpisodeCard({ episode }) {
   }, [episode.characters]);
 
   return (
-    <div className="flex flex-1 flex-col items-center gap-4">
+    <div className="flex flex-1 flex-col items-center gap-4 text-center">
       <p className="text-lg font-medium">
         {episode.episode}: {episode.name}
       </p>
@@ -60,9 +60,7 @@ function EpisodeCard({ episode }) {
             />
           ))
         ) : (
-          <p className="text-center">
-            There are no characters in this episode.
-          </p>
+          <p>There are no characters in this episode.</p>
         )}
       </div>
     </div>

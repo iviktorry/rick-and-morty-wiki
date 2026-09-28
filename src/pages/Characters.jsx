@@ -73,7 +73,7 @@ export default function Characters() {
   });
 
   return (
-    <section className="flex flex-1 flex-col items-center gap-6">
+    <section className="flex flex-1 flex-col items-center gap-6 text-center">
       <SearchBar handleSearch={handleSearch} />
       <Filters>
         <FilterOption
@@ -118,7 +118,7 @@ export default function Characters() {
             />
           ))
         ) : (
-          <p className="text-center">Nothing was found on your search.</p>
+          <p>Nothing was found on your search.</p>
         )}
       </div>
       <Pages
