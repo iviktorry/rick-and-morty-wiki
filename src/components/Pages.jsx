@@ -1,4 +1,9 @@
-export default function Pages({ pages, setCurrentPage, currentPage }) {
+export default function Pages({
+  pages,
+  currentPage,
+  isLoading,
+  handlePageChange,
+}) {
   if (pages <= 1) return null;
   const maxVisibleButtons = 10;
 
@@ -19,8 +24,8 @@ export default function Pages({ pages, setCurrentPage, currentPage }) {
   return (
     <section className="flex flex-1 flex-wrap items-end justify-center gap-2 md:gap-6">
       <button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage((prev) => prev - 1)}
+        disabled={isLoading || currentPage === 1}
+        onClick={() => handlePageChange(currentPage - 1)}
         className={`${style}`}
       >
         Prev
@@ -29,8 +34,9 @@ export default function Pages({ pages, setCurrentPage, currentPage }) {
       {startPage > 1 && (
         <>
           <button
+            disabled={isLoading}
             className={`size-8 ring-2 ${style}`}
-            onClick={() => setCurrentPage(1)}
+            onClick={() => handlePageChange(1)}
           >
             1
           </button>
@@ -40,15 +46,16 @@ export default function Pages({ pages, setCurrentPage, currentPage }) {
       {visiblePages.map((page) => (
         <button
           key={page}
-          onClick={() => setCurrentPage(page)}
+          disabled={isLoading}
+          onClick={() => handlePageChange(page)}
           className={`size-8 rounded-full ring-2 ${style} ${currentPage === page ? "scale-112 text-xl font-medium" : null}`}
         >
           {page}
         </button>
       ))}
       <button
-        disabled={currentPage === pages}
-        onClick={() => setCurrentPage((prev) => prev + 1)}
+        disabled={isLoading || currentPage === pages}
+        onClick={() => handlePageChange(currentPage + 1)}
         className={`${style}`}
       >
         Next
