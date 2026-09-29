@@ -6,7 +6,10 @@ export default function SearchBar({ handleSearch }) {
       onSubmit={handleSearch}
       className="relative mx-auto flex h-8 w-full gap-3 md:w-2xl"
     >
-      <Search className="absolute top-1 left-1 text-neutral-600" />
+      <Search
+        className="absolute top-1 left-1 text-neutral-600"
+        aria-hidden="true"
+      />
       <input
         type="text"
         name="search"

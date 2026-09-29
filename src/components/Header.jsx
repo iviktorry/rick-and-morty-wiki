@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Header() {
   function navLinkStyles({ isActive }) {
-    return `transition-all duration-300 ease-linear md:hover:[text-shadow:_0.5px_0_0_currentColor,_-0.5px_0_0_currentColor] ${isActive ? "[text-shadow:_0.5px_0_0_currentColor,_-0.5px_0_0_currentColor] text-lg" : ""} `;
+    return `transition-all duration-300 ease-linear md:hover:[text-shadow:_0.5px_0_0_currentColor,_-0.5px_0_0_currentColor] ${isActive ? "[text-shadow:_0.5px_0_0_currentColor,_-0.5px_0_0_currentColor]" : ""} `;
   }
   return (
     <header className="flex flex-col items-center justify-between gap-2 pt-2 sm:h-9 sm:flex-row sm:gap-0">

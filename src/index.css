@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 @theme {
+  --font-custom: "Ubuntu", sans-serif;
+
   --color-blue-600: #40448e;
   --color-orange-100: #eee6ce;
-  --color-orange-700: #B0563C;
+  --color-orange-700: #b0563c;
   --color-lime-600: #557538;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }

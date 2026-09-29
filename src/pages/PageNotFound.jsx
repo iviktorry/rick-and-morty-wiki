@@ -22,7 +22,7 @@ export default function PageNotFound() {
       </div>
       <Link
         to="/"
-        className="transition-all duration-300 ease-linear md:hover:font-bold"
+        className="transition-all duration-300 ease-linear hover:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor]"
       >
         Return to Dimension C-137
       </Link>
