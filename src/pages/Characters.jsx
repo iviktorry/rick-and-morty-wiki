@@ -49,7 +49,7 @@ export default function Characters() {
         }
       })
       .finally(() => {
-        if (!controller.signal.aborter) {
+        if (!controller.signal.aborted) {
           setIsLoading(false);
         }
       });

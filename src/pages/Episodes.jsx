@@ -100,7 +100,7 @@ export default function Episodes() {
         }
       })
       .finally(() => {
-        if (!controller.signal.aborter) {
+        if (!controller.signal.aborted) {
           setIsLoading(false);
         }
       });

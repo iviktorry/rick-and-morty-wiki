@@ -100,7 +100,7 @@ export default function Locations() {
         }
       })
       .finally(() => {
-        if (!controller.signal.aborter) {
+        if (!controller.signal.aborted) {
           setIsLoading(false);
         }
       });
