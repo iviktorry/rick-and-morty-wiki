@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import portalGif from "../assets/images/portal-gif.gif";
+import portalGif from "../assets/portal-gif.gif";
 import { useEffect } from "react";
 
 export default function PageNotFound() {

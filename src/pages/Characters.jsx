@@ -102,7 +102,7 @@ export default function Characters() {
       <h1 className="sr-only">Characters</h1>
 
       <div
-        className={`${filteredCharacters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
+        className={`${filteredCharacters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
       >
         {filteredCharacters.length ? (
           filteredCharacters.map((character) => (

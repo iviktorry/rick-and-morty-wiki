@@ -42,7 +42,7 @@ function EpisodeCard({ episode }) {
         {episode.episode}: {episode.name}
       </h2>
       <div
-        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
+        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
       >
         {characters.length ? (
           characters.map((character) => (

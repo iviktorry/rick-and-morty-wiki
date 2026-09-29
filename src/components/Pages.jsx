@@ -20,7 +20,8 @@ export default function Pages({
     (_, index) => startPage + index,
   );
   const style =
-    "hover:scale-120 focus:scale-120 rounded-full ring-neutral-800 transition-all duration-200 ease-linear disabled:opacity-50 disabled:hover:scale-100";
+    "transition-all duration-300 ease-linear lg:text-lg hover:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] focus-visible:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] disabled:opacity-50 disabled:hover:text-shadow-none";
+
   return (
     <nav
       aria-label="Pagination"

@@ -37,11 +37,11 @@ export default function Character({
           {name}
         </h3>
         <span>{species}</span>
-        <span className="pt-2 text-xs text-neutral-600">Originated</span>
+        <span className="pt-2 text-xs text-neutral-700">Originated</span>
         <span className="line-clamp-1" title={origin}>
           {origin}
         </span>
-        <span className="pt-2 text-xs text-neutral-600">
+        <span className="pt-2 text-xs text-neutral-700">
           Last known location
         </span>
         <span className="line-clamp-1" title={location}>

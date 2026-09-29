@@ -26,11 +26,11 @@ export default function Home() {
     },
   ];
   return (
-    <section className="flex flex-1 flex-col justify-center gap-2 text-center">
-      <h2 className="text-2xl font-semibold md:text-3xl">
+    <section className="flex flex-1 flex-col justify-center gap-6 text-center lg:text-lg">
+      <h2 className="text-2xl font-medium md:text-3xl">
         Welcome to the Rick and Morty Wiki!
       </h2>
-      <div className="flex flex-col justify-between gap-6 pt-4 lg:flex-row lg:gap-10">
+      <div className="flex flex-col justify-between gap-6 lg:flex-row lg:gap-10">
         {categories.map((cat) => (
           <Link
             to={cat.path}

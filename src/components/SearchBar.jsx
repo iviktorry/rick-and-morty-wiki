@@ -14,7 +14,7 @@ export default function SearchBar({ handleSearch }) {
       />
       <button
         type="submit"
-        className="rounded-lg bg-neutral-600 px-2 text-neutral-100 ring-2 ring-neutral-800 transition-all duration-300 ease-linear hover:bg-neutral-500"
+        className="rounded-lg bg-neutral-600 px-2 text-neutral-100 ring-2 ring-neutral-800 transition-all duration-300 ease-linear hover:bg-neutral-500 focus-visible:outline-2 focus-visible:outline-white"
       >
         Search
       </button>
