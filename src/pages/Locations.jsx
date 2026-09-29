@@ -60,7 +60,7 @@ export function LocationCard({ location }) {
             />
           ))
         ) : (
-          <p>There are no residents on this location.</p>
+          <p>There are no residents at this location.</p>
         )}
       </div>
     </div>
@@ -126,6 +126,8 @@ export default function Locations() {
           handleChange={handleChange}
         />
       </Filters>
+
+      <h1 className="sr-only">Locations</h1>
 
       {filteredLocations.map((location) => (
         <LocationCard key={location.id} location={location} />

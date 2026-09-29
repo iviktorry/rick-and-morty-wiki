@@ -126,6 +126,9 @@ export default function Episodes() {
           handleChange={handleChange}
         />
       </Filters>
+
+      <h1 className="sr-only">Episodes</h1>
+
       {filteredEpisodes.map((episode) => (
         <EpisodeCard key={episode.id} episode={episode} />
       ))}

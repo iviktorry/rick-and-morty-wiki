@@ -120,7 +120,7 @@ export default function Characters() {
             />
           ))
         ) : (
-          <p>Nothing was found on your search.</p>
+          <p>Nothing was found for your search.</p>
         )}
       </div>
       <Pages
