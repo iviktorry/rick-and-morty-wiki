@@ -1,19 +1,8 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Schwifty";
-  src: url("./assets/fonts/get_schwifty.ttf") format("truetype"); 
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme {
-  --font-custom: "Ubuntu", sans-serif;
-  --font-schwifty: "Schwifty", sans-serif;
-
   --color-blue-600: #40448e;
   --color-orange-100: #eee6ce;
-  --color-orange-700: #c34c22;
-  --color-lime-600: #6f9f3f;
+  --color-orange-700: #B0563C;
+  --color-lime-600: #557538;
 }
