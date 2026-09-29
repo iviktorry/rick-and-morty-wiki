@@ -30,6 +30,7 @@ export default function Characters() {
 
   useEffect(() => {
     const controller = new AbortController();
+    document.title = "Characters | Wiki";
 
     fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}`, {
       signal: controller.signal,

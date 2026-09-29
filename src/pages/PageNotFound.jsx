@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import portalGif from "../assets/images/portal-gif.gif";
+import { useEffect } from "react";
 
 export default function PageNotFound() {
+  useEffect(() => {
+    document.title = "Page not found | Wiki";
+  });
+
   return (
     <section className="flex flex-1 flex-col items-center justify-center text-center sm:max-w-xl md:text-lg">
       <p>

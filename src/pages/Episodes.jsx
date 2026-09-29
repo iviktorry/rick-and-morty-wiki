@@ -81,6 +81,7 @@ export default function Episodes() {
 
   useEffect(() => {
     const controller = new AbortController();
+    document.title = "Episodes | Wiki";
 
     fetch(`https://rickandmortyapi.com/api/episode?page=${currentPage}`, {
       signal: controller.signal,

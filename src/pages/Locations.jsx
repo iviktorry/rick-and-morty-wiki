@@ -81,6 +81,7 @@ export default function Locations() {
 
   useEffect(() => {
     const controller = new AbortController();
+    document.title = "Locations | Wiki";
 
     fetch(`https://rickandmortyapi.com/api/location?page=${currentPage}`, {
       signal: controller.signal,
