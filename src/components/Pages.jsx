@@ -39,7 +39,8 @@ export default function Pages({
         <>
           <button
             disabled={isLoading}
-            className={`size-6 items-center justify-center sm:size-8 ${style}`}
+            aria-current="1"
+            className={`flex size-6 items-center justify-center sm:size-10 ${style}`}
             onClick={() => handlePageChange(1)}
           >
             1
@@ -47,16 +48,19 @@ export default function Pages({
           {startPage > 2 && <span>...</span>}
         </>
       )}
+
       {visiblePages.map((page) => (
         <button
           key={page}
           disabled={isLoading}
+          aria-current={page}
           onClick={() => handlePageChange(page)}
-          className={`flex size-6 items-center justify-center rounded-full sm:size-8 ${style} ${currentPage === page ? "scale-113 text-xl font-semibold" : null}`}
+          className={`flex size-6 items-center justify-center sm:size-10 ${style} ${currentPage === page ? "scale-113 text-xl [text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] hover:scale-113" : null}`}
         >
           {page}
         </button>
       ))}
+
       <button
         disabled={isLoading || currentPage === pages}
         onClick={() => handlePageChange(currentPage + 1)}

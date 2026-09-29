@@ -10,6 +10,7 @@ export default function SearchBar({ handleSearch }) {
       <input
         type="text"
         name="search"
+        aria-label="Search characters"
         className="w-full rounded-lg pl-9 ring-2 ring-neutral-800"
       />
       <button
