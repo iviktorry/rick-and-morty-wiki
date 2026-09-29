@@ -17,10 +17,14 @@ export default function Characters() {
 
   function handleSearch(event) {
     event.preventDefault();
-
     const formData = new FormData(event.currentTarget);
-    const search = formData.get("search");
-    setSearchText(search);
+    setCurrentPage(1);
+    setSearchText(formData.get("search"));
+  }
+
+  function handleFilterChange(setterFunc, value) {
+    setCurrentPage(1);
+    setterFunc(value);
   }
 
   function handlePageChange(newPage) {
@@ -32,10 +36,22 @@ export default function Characters() {
     const controller = new AbortController();
     document.title = "Characters | Wiki";
 
-    fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}`, {
+    const params = new URLSearchParams();
+    params.set("page", currentPage);
+    if (status.toLowerCase()) params.set("status", status);
+    if (gender.toLowerCase()) params.set("gender", gender);
+    if (species.toLowerCase()) params.set("species", species);
+    if (searchText.toLowerCase()) params.set("name", searchText);
+
+    fetch(`https://rickandmortyapi.com/api/character?${params.toString()}`, {
       signal: controller.signal,
     })
       .then((res) => {
+        if (res.status === 404) {
+          setCharacters([]);
+          setPages(0);
+          return null;
+        }
         if (!res.ok) throw new Error(`server mistake: ${res.status}`);
         return res.json();
       })
@@ -55,23 +71,7 @@ export default function Characters() {
       });
 
     return () => controller.abort();
-  }, [currentPage]);
-
-  const filteredCharacters = characters.filter((character) => {
-    const matchesSpecies =
-      species !== "" ? character.species === species : character;
-    const matchesGender =
-      gender !== "" ? character.gender === gender : character;
-    const matchesStatus =
-      status !== "" ? character.status === status : character;
-
-    const matcherSearch =
-      searchText !== ""
-        ? character.name.toLowerCase().includes(searchText.toLowerCase())
-        : character;
-
-    return matchesSpecies && matcherSearch && matchesGender && matchesStatus;
-  });
+  }, [currentPage, gender, species, status, searchText]);
 
   return (
     <section className="flex flex-1 flex-col items-center gap-6 text-center">
@@ -83,7 +83,7 @@ export default function Characters() {
           defaultOption="Not selected"
           options={["Alive", "Dead", "unknown"]}
           isLoading={isLoading}
-          handleChange={setStatus}
+          handleChange={(value) => handleFilterChange(setStatus, value)}
         />
         <FilterOption
           label="Gender"
@@ -91,7 +91,7 @@ export default function Characters() {
           defaultOption="Not selected"
           options={["Male", "Female", "Genderless", "unknown"]}
           isLoading={isLoading}
-          handleChange={setGender}
+          handleChange={(value) => handleFilterChange(setGender, value)}
         />
         <FilterOption
           label="Species"
@@ -105,16 +105,16 @@ export default function Characters() {
             "Poopybutthole",
             "Mythological Creature",
           ]}
-          handleChange={setSpecies}
+          handleChange={(value) => handleFilterChange(setSpecies, value)}
         />
       </Filters>
       <h1 className="sr-only">Characters</h1>
 
       <div
-        className={`${filteredCharacters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
+        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
       >
-        {filteredCharacters.length ? (
-          filteredCharacters.map((character) => (
+        {characters.length ? (
+          characters.map((character) => (
             <Character
               key={character.id}
               id={character.id}
