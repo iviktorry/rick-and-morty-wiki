@@ -68,11 +68,12 @@ function EpisodeCard({ episode }) {
 }
 
 export default function Episodes() {
-  const [episodes, setEpisodes] = useState([]);
+  const [episodesList, setEpisodesList] = useState([]);
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filter, setFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedEpId, setSelectedEpId] = useState(1);
+  const [currentEpisode, setCurrentEpisode] = useState(null);
 
   function handlePageChange(newPage) {
     setIsLoading(true);
@@ -91,8 +92,30 @@ export default function Episodes() {
         return res.json();
       })
       .then((res) => {
-        setEpisodes(res.results);
+        setEpisodesList(res.results);
         setPages(res.info.pages);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(`Fetch error: ${error}`);
+        }
+      });
+
+    return () => controller.abort();
+  }, [currentPage]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`https://rickandmortyapi.com/api/episode/${selectedEpId}`, {
+      signal: controller.signal,
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
+        return res.json();
+      })
+      .then((res) => {
+        setCurrentEpisode(res);
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
@@ -106,32 +129,28 @@ export default function Episodes() {
       });
 
     return () => controller.abort();
-  }, [currentPage]);
-
-  const names = episodes.map((episode) => episode.name);
+  }, [selectedEpId, currentPage]);
 
   function handleChange(value) {
-    setFilter(value);
+    setIsLoading(true);
+    setSelectedEpId(value);
   }
 
-  const filteredEpisodes = episodes.filter((episode) =>
-    filter !== "" ? episode.name === filter : episode,
-  );
   return (
     <section className="flex flex-1 flex-col items-center gap-10">
       <Filters>
         <FilterOption
           label="Choose an episode"
-          options={names}
+          id="episode"
+          isLoading={isLoading}
+          options={episodesList}
           handleChange={handleChange}
         />
       </Filters>
 
       <h1 className="sr-only">Episodes</h1>
 
-      {filteredEpisodes.map((episode) => (
-        <EpisodeCard key={episode.id} episode={episode} />
-      ))}
+      {currentEpisode && <EpisodeCard episode={currentEpisode} />}
 
       <Pages
         pages={pages}

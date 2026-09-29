@@ -79,16 +79,25 @@ export default function Characters() {
       <Filters>
         <FilterOption
           label="Status"
+          id="status"
+          defaultOption="Not selected"
           options={["Alive", "Dead", "unknown"]}
+          isLoading={isLoading}
           handleChange={setStatus}
         />
         <FilterOption
           label="Gender"
+          id="gender"
+          defaultOption="Not selected"
           options={["Male", "Female", "Genderless", "unknown"]}
+          isLoading={isLoading}
           handleChange={setGender}
         />
         <FilterOption
           label="Species"
+          id="species"
+          defaultOption="Not selected"
+          isLoading={isLoading}
           options={[
             "Human",
             "Alien",

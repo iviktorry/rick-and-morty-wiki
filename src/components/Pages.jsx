@@ -20,7 +20,7 @@ export default function Pages({
     (_, index) => startPage + index,
   );
   const style =
-    "transition-all duration-300 ease-linear lg:text-lg hover:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] focus-visible:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] disabled:opacity-50 disabled:hover:text-shadow-none";
+    "transition-all duration-300 ease-linear lg:text-lg hover:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] focus-visible:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] disabled:opacity-50 disabled:hover:cursor-not-allowed";
 
   return (
     <nav

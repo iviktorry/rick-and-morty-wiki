@@ -68,11 +68,12 @@ export function LocationCard({ location }) {
 }
 
 export default function Locations() {
-  const [locations, setLocations] = useState([]);
+  const [locationList, setLocationList] = useState([]);
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filter, setFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedLocId, setSelectedLocId] = useState(1);
+  const [currentLoc, setCurrentLoc] = useState(null);
 
   function handlePageChange(newPage) {
     setIsLoading(true);
@@ -91,8 +92,33 @@ export default function Locations() {
         return res.json();
       })
       .then((res) => {
-        setLocations(res.results);
+        setLocationList(res.results);
         setPages(res.info.pages);
+        if (res.results.length > 0) {
+          setSelectedLocId(res.results[0].id);
+        }
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error(`Fetch error: ${error}`);
+        }
+      });
+
+    return () => controller.abort();
+  }, [currentPage]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`https://rickandmortyapi.com/api/location/${selectedLocId}`, {
+      signal: controller.signal,
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`server error: ${res.status}`);
+        return res.json();
+      })
+      .then((res) => {
+        setCurrentLoc(res);
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
@@ -106,32 +132,28 @@ export default function Locations() {
       });
 
     return () => controller.abort();
-  }, [currentPage]);
-
-  const names = locations.map((location) => location.name);
+  }, [selectedLocId, currentPage]);
 
   function handleChange(value) {
-    setFilter(value);
+    setIsLoading(true);
+    setSelectedLocId(value);
   }
 
-  const filteredLocations = locations.filter((location) =>
-    filter !== "" ? location.name === filter : location,
-  );
   return (
     <section className="flex flex-1 flex-col items-center gap-10">
       <Filters>
         <FilterOption
           label="Choose location"
-          options={names}
+          id="location"
+          isLoading={isLoading}
+          options={locationList}
           handleChange={handleChange}
         />
       </Filters>
 
       <h1 className="sr-only">Locations</h1>
 
-      {filteredLocations.map((location) => (
-        <LocationCard key={location.id} location={location} />
-      ))}
+      {currentLoc && <LocationCard location={currentLoc} />}
 
       <Pages
         pages={pages}

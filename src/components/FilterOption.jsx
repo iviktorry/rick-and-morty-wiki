@@ -1,24 +1,35 @@
 export default function FilterOption({
+  id,
   label,
   options = [],
-  value,
   handleChange,
+  defaultOption,
+  isLoading,
 }) {
   return (
-    <select
-      name={label}
-      id={label}
-      value={value}
-      onChange={(e) => handleChange(e.target.value)}
+    <div className="flex flex-1 items-center gap-2">
+      <label htmlFor={id} className="font-semibold whitespace-nowrap">
+        {label}:
+      </label>
 
-      className="h-8 w-full rounded-lg px-2 py-1 text-center ring-2 ring-neutral-800"
-    >
-      <option value="">{label}</option>
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
+      <select
+        name={label}
+        id={id}
+        disabled={isLoading}
+        onChange={(e) => handleChange(e.target.value)}
+        className="h-8 w-full min-w-10 rounded-lg py-1 text-center ring-2 ring-neutral-800 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        {defaultOption && <option value="">{defaultOption}</option>}
+        {options.map((option) => {
+          const optValue = typeof option === "object" ? option.id : option;
+          const optName = typeof option === "object" ? option.name : option;
+          return (
+            <option key={optValue} value={optValue}>
+              {optName}
+            </option>
+          );
+        })}
+      </select>
+    </div>
   );
 }

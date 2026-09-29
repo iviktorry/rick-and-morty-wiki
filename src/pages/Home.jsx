@@ -46,7 +46,7 @@ export default function Home() {
               <img
                 src={cat.image}
                 alt=""
-                className="aspect-video size-full object-cover brightness-40"
+                className="aspect-video size-full object-cover brightness-50"
               />
             </div>
 
