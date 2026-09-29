@@ -48,9 +48,9 @@ export default function Home() {
               />
             </div>
 
-            <h2 className="absolute inset-x-0 bottom-5 text-center text-xl lg:text-2xl">
+            <h3 className="absolute inset-x-0 bottom-5 text-center text-xl lg:text-2xl">
               {cat.title}
-            </h2>
+            </h3>
           </Link>
         ))}
       </div>

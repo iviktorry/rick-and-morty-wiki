@@ -10,7 +10,7 @@ export default function Character({
   location,
 }) {
   return (
-    <div className="aspect-3/5 w-75 min-w-0 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
+    <article className="aspect-3/5 w-75 min-w-0 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
       <div className="relative size-75 w-full min-w-0 border-b-2 border-neutral-800">
         <img
           src={image}
@@ -33,9 +33,9 @@ export default function Character({
         </span>
       </div>
       <div className="flex flex-col items-center px-2 pt-4 pb-1 text-center">
-        <span className="line-clamp-2 text-xl font-medium" title={name}>
+        <h3 className="line-clamp-2 text-xl font-medium" title={name}>
           {name}
-        </span>
+        </h3>
         <span>{species}</span>
         <span className="pt-2 text-xs text-neutral-600">Originated</span>
         <span className="line-clamp-1" title={origin}>
@@ -48,6 +48,6 @@ export default function Character({
           {location}
         </span>
       </div>
-    </div>
+    </article>
   );
 }

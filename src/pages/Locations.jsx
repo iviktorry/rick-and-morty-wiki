@@ -38,9 +38,9 @@ export function LocationCard({ location }) {
 
   return (
     <div className="flex flex-1 flex-col items-center gap-4 text-center">
-      <p className="text-lg font-medium">
+      <h2 className="text-lg font-medium">
         {location.name}: {location.type}
-      </p>
+      </h2>
       <div
         className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
       >

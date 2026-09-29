@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <header className="flex flex-col items-center justify-between gap-2 pt-2 sm:flex-row sm:gap-0">
       <h1>
-        <NavLink to="/" className={navLinkStyles}>
+        <NavLink end to="/" className={navLinkStyles}>
           Rick and Morty Wiki
         </NavLink>
       </h1>

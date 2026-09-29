@@ -22,7 +22,10 @@ export default function Pages({
   const style =
     "hover:scale-120 focus:scale-120 rounded-full ring-neutral-800 transition-all duration-200 ease-linear disabled:opacity-50 disabled:hover:scale-100";
   return (
-    <section className="mt-auto flex items-center justify-center gap-2">
+    <nav
+      aria-label="Pagination"
+      className="mt-auto flex items-center justify-center gap-2"
+    >
       <button
         disabled={isLoading || currentPage === 1}
         onClick={() => handlePageChange(currentPage - 1)}
@@ -60,6 +63,6 @@ export default function Pages({
       >
         Next
       </button>
-    </section>
+    </nav>
   );
 }
