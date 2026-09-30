@@ -5,16 +5,16 @@ import Filters from "../components/Filters";
 import FilterOption from "../components/FilterOption";
 
 export function LocationCard({ location }) {
+  const characterIds = location.residents
+    .map((url) => url.split("/").pop())
+    .filter(Boolean);
+
   const [characters, setCharacters] = useState([]);
   const [charError, setCharError] = useState(null);
-  const [isCharLoading, setIsCharLoading] = useState(true);
+  const [isCharLoading, setIsCharLoading] = useState(characterIds.length > 0);
 
   useEffect(() => {
     const controller = new AbortController();
-
-    const characterIds = location.residents
-      .map((url) => url.split("/").pop())
-      .filter(Boolean);
 
     if (!characterIds || characterIds.length === 0) return;
 
@@ -42,7 +42,7 @@ export function LocationCard({ location }) {
       });
 
     return () => controller.abort();
-  }, [location.residents]);
+  }, [location.residents, characterIds]);
 
   return (
     <div className="flex flex-1 flex-col items-center gap-4 text-center">
@@ -80,7 +80,7 @@ export default function Locations() {
   const [locationList, setLocationList] = useState([]);
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedLocId, setSelectedLocId] = useState(1);
   const [currentLoc, setCurrentLoc] = useState(null);
   const [error, setError] = useState(null);

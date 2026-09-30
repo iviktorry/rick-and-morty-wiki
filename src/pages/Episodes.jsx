@@ -5,16 +5,16 @@ import FilterOption from "../components/FilterOption";
 import Filters from "../components/Filters";
 
 function EpisodeCard({ episode }) {
+  const characterIds = episode.characters
+    .map((url) => url.split("/").pop())
+    .filter(Boolean);
+
   const [characters, setCharacters] = useState([]);
-  const [isCharLoading, setIsCharLoading] = useState(true);
+  const [isCharLoading, setIsCharLoading] = useState(characterIds.length > 0);
   const [charError, setCharError] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
-
-    const characterIds = episode.characters
-      .map((url) => url.split("/").pop())
-      .filter(Boolean);
 
     if (!characterIds || characterIds.length === 0) return;
 
@@ -42,7 +42,7 @@ function EpisodeCard({ episode }) {
       });
 
     return () => controller.abort();
-  }, [episode.characters]);
+  }, [episode.characters, characterIds]);
 
   return (
     <div className="flex flex-1 flex-col items-center gap-4 text-center">
@@ -80,7 +80,7 @@ export default function Episodes() {
   const [episodesList, setEpisodesList] = useState([]);
   const [pages, setPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedEpId, setSelectedEpId] = useState(1);
   const [currentEpisode, setCurrentEpisode] = useState(null);
   const [error, setError] = useState(null);
