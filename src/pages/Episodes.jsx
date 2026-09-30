@@ -6,6 +6,8 @@ import Filters from "../components/Filters";
 
 function EpisodeCard({ episode }) {
   const [characters, setCharacters] = useState([]);
+  const [isCharLoading, setIsCharLoading] = useState(true);
+  const [charError, setCharError] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -30,6 +32,12 @@ function EpisodeCard({ episode }) {
       .catch((error) => {
         if (error.name !== "AbortError") {
           console.error(`Fetch error ${error}`);
+          setCharError("Failed to load characters for this episode.");
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setIsCharLoading(false);
         }
       });
 
@@ -41,11 +49,15 @@ function EpisodeCard({ episode }) {
       <h2 className="text-lg font-medium">
         {episode.episode}: {episode.name}
       </h2>
-      <div
-        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
-      >
-        {characters.length ? (
-          characters.map((character) => (
+
+      {isCharLoading && <p>Loading...</p>}
+      {!isCharLoading && charError && <p>{charError}</p>}
+      {!isCharLoading && !charError && characters.length === 0 && (
+        <p>There are no characters in this episode.</p>
+      )}
+      {!isCharLoading && !charError && characters.length > 0 && (
+        <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {characters.map((character) => (
             <Character
               key={character.id}
               id={character.id}
@@ -53,16 +65,13 @@ function EpisodeCard({ episode }) {
               status={character.status}
               gender={character.gender}
               species={character.species}
-              character={character}
               image={character.image}
               origin={character.origin.name}
               location={character.location.name}
             />
-          ))
-        ) : (
-          <p>There are no characters in this episode.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -74,8 +83,10 @@ export default function Episodes() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedEpId, setSelectedEpId] = useState(1);
   const [currentEpisode, setCurrentEpisode] = useState(null);
+  const [error, setError] = useState(null);
 
   function handlePageChange(newPage) {
+    setError(null);
     setIsLoading(true);
     setCurrentPage(newPage);
   }
@@ -94,10 +105,14 @@ export default function Episodes() {
       .then((res) => {
         setEpisodesList(res.results);
         setPages(res.info.pages);
+        if (res.results.length > 0) {
+          setSelectedEpId(res.results[0].id);
+        }
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
+          setError("Could not load episodes. Please try again.");
         }
       });
 
@@ -129,9 +144,10 @@ export default function Episodes() {
       });
 
     return () => controller.abort();
-  }, [selectedEpId, currentPage]);
+  }, [selectedEpId]);
 
-  function handleChange(value) {
+  function handleFilterChange(value) {
+    setError(null);
     setIsLoading(true);
     setSelectedEpId(value);
   }
@@ -144,13 +160,18 @@ export default function Episodes() {
           id="episode"
           isLoading={isLoading}
           options={episodesList}
-          handleChange={handleChange}
+          handleChange={handleFilterChange}
+          value={selectedEpId}
         />
       </Filters>
 
       <h1 className="sr-only">Episodes</h1>
 
-      {currentEpisode && <EpisodeCard episode={currentEpisode} />}
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && error && <p>{error}</p>}
+      {!isLoading && !error && currentEpisode && (
+        <EpisodeCard key={currentEpisode.id} episode={currentEpisode} />
+      )}
 
       <Pages
         pages={pages}

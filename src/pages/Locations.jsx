@@ -6,6 +6,8 @@ import FilterOption from "../components/FilterOption";
 
 export function LocationCard({ location }) {
   const [characters, setCharacters] = useState([]);
+  const [charError, setCharError] = useState(null);
+  const [isCharLoading, setIsCharLoading] = useState(true);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -30,6 +32,12 @@ export function LocationCard({ location }) {
       .catch((error) => {
         if (error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
+          setCharError("Failed to load residents for this location.");
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setIsCharLoading(false);
         }
       });
 
@@ -41,11 +49,15 @@ export function LocationCard({ location }) {
       <h2 className="text-lg font-medium">
         {location.name}: {location.type}
       </h2>
-      <div
-        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
-      >
-        {characters.length ? (
-          characters.map((character) => (
+
+      {isCharLoading && <p>Loading characters...</p>}
+      {!isCharLoading && charError && <p>{charError}</p>}
+      {!isCharLoading && !charError && characters.length === 0 && (
+        <p>There are no residents in this location.</p>
+      )}
+      {!isCharLoading && !charError && characters.length > 0 && (
+        <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {characters.map((character) => (
             <Character
               key={character.id}
               id={character.id}
@@ -57,11 +69,9 @@ export function LocationCard({ location }) {
               origin={character.origin.name}
               location={character.location.name}
             />
-          ))
-        ) : (
-          <p>There are no residents at this location.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -73,8 +83,10 @@ export default function Locations() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLocId, setSelectedLocId] = useState(1);
   const [currentLoc, setCurrentLoc] = useState(null);
+  const [error, setError] = useState(null);
 
   function handlePageChange(newPage) {
+    setError(null);
     setIsLoading(true);
     setCurrentPage(newPage);
   }
@@ -100,6 +112,7 @@ export default function Locations() {
       .catch((error) => {
         if (error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
+          setError("Could not load locations. Please try again.");
         }
       });
 
@@ -134,6 +147,7 @@ export default function Locations() {
   }, [selectedLocId]);
 
   function handleChange(value) {
+    setError(null);
     setIsLoading(true);
     setSelectedLocId(value);
   }
@@ -153,7 +167,11 @@ export default function Locations() {
 
       <h1 className="sr-only">Locations</h1>
 
-      {currentLoc && <LocationCard location={currentLoc} />}
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && error && <p>{error}</p>}
+      {!isLoading && !error && currentLoc && (
+        <LocationCard key={currentLoc.id} location={currentLoc} />
+      )}
 
       <Pages
         pages={pages}

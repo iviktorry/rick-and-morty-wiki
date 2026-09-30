@@ -14,20 +14,24 @@ export default function Characters() {
   const [gender, setGender] = useState("");
   const [species, setSpecies] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleSearch(event) {
     event.preventDefault();
+    setError(null);
     const formData = new FormData(event.currentTarget);
     setCurrentPage(1);
     setSearchText(formData.get("search"));
   }
 
   function handleFilterChange(setterFunc, value) {
+    setError(null);
     setCurrentPage(1);
     setterFunc(value);
   }
 
   function handlePageChange(newPage) {
+    setError(null);
     setIsLoading(true);
     setCurrentPage(newPage);
   }
@@ -38,10 +42,10 @@ export default function Characters() {
 
     const params = new URLSearchParams();
     params.set("page", currentPage);
-    if (status.toLowerCase()) params.set("status", status);
-    if (gender.toLowerCase()) params.set("gender", gender);
-    if (species.toLowerCase()) params.set("species", species);
-    if (searchText.toLowerCase()) params.set("name", searchText);
+    if (status) params.set("status", status);
+    if (gender) params.set("gender", gender);
+    if (species) params.set("species", species);
+    if (searchText) params.set("name", searchText);
 
     fetch(`https://rickandmortyapi.com/api/character?${params.toString()}`, {
       signal: controller.signal,
@@ -56,12 +60,14 @@ export default function Characters() {
         return res.json();
       })
       .then((res) => {
+        if (!res) return;
         setCharacters(res.results);
         setPages(res.info.pages);
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
           console.error(`Uploading error: ${error}`);
+          setError("Could not load characters. Please try again.");
         }
       })
       .finally(() => {
@@ -75,7 +81,11 @@ export default function Characters() {
 
   return (
     <section className="flex flex-1 flex-col items-center gap-6 text-center">
-      <SearchBar handleSearch={handleSearch} />
+      <SearchBar
+        handleSearch={handleSearch}
+        setSearchText={setSearchText}
+        setCurrentPage={setCurrentPage}
+      />
       <Filters>
         <FilterOption
           label="Status"
@@ -83,6 +93,7 @@ export default function Characters() {
           defaultOption="Not selected"
           options={["Alive", "Dead", "unknown"]}
           isLoading={isLoading}
+          value={status}
           handleChange={(value) => handleFilterChange(setStatus, value)}
         />
         <FilterOption
@@ -91,6 +102,7 @@ export default function Characters() {
           defaultOption="Not selected"
           options={["Male", "Female", "Genderless", "unknown"]}
           isLoading={isLoading}
+          value={gender}
           handleChange={(value) => handleFilterChange(setGender, value)}
         />
         <FilterOption
@@ -98,6 +110,7 @@ export default function Characters() {
           id="species"
           defaultOption="Not selected"
           isLoading={isLoading}
+          value={species}
           options={[
             "Human",
             "Alien",
@@ -110,11 +123,14 @@ export default function Characters() {
       </Filters>
       <h1 className="sr-only">Characters</h1>
 
-      <div
-        className={`${characters.length ? "grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" : ""}`}
-      >
-        {characters.length ? (
-          characters.map((character) => (
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && error && <p>{error}</p>}
+      {!isLoading && !error && characters.length === 0 && (
+        <p>Nothing was found for your search</p>
+      )}
+      {!isLoading && !error && characters.length > 0 && (
+        <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {characters.map((character) => (
             <Character
               key={character.id}
               id={character.id}
@@ -122,16 +138,14 @@ export default function Characters() {
               status={character.status}
               gender={character.gender}
               species={character.species}
-              character={character}
               image={character.image}
               origin={character.origin.name}
               location={character.location.name}
             />
-          ))
-        ) : (
-          <p>Nothing was found for your search.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
+
       <Pages
         pages={pages}
         currentPage={currentPage}
