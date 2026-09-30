@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Home() {
   useEffect(() => {
     document.title = "Rick and Morty Wiki";
-  });
+  }, []);
 
   const categories = [
     {
@@ -28,15 +28,15 @@ export default function Home() {
   ];
   return (
     <section className="flex flex-1 flex-col justify-center gap-6 text-center lg:text-lg">
-      <h2 className="text-2xl font-medium md:text-3xl">
+      <h1 className="text-2xl font-medium md:text-3xl">
         Welcome to the Rick and Morty Wiki!
-      </h2>
+      </h1>
       <div className="flex flex-col justify-between gap-6 lg:flex-row lg:gap-10">
         {categories.map((cat) => (
           <Link
             to={cat.path}
             key={cat.title}
-            className="relative overflow-hidden rounded-xl text-white transition-all duration-300 ease-linear md:hover:scale-103 lg:rounded-2xl"
+            className="relative overflow-hidden rounded-xl text-white transition-all duration-300 ease-linear focus-visible:scale-105 md:hover:scale-105 lg:rounded-2xl"
           >
             <p className="absolute inset-x-0 top-4 z-10 px-2 text-center">
               {cat.desc}

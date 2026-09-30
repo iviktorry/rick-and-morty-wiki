@@ -5,7 +5,6 @@ export default function Character({
   gender,
   name,
   species,
-  character,
   origin,
   location,
 }) {
@@ -19,12 +18,12 @@ export default function Character({
         />
 
         <span
-          className={`absolute top-2 left-2 max-w-[48%] rounded-lg px-2 leading-tight text-neutral-100 ring-2 ring-neutral-800 ${character.status === "Alive" ? "bg-lime-600" : character.status === "Dead" ? "bg-orange-700" : "bg-neutral-600"} `}
+          className={`absolute top-2 left-2 max-w-[48%] rounded-lg px-2 leading-tight text-neutral-100 ring-2 ring-neutral-800 ${status === "Alive" ? "bg-lime-600" : status === "Dead" ? "bg-orange-700" : "bg-neutral-600"} `}
         >
           {status}
         </span>
         <span
-          className={`absolute top-2 right-2 max-w-[48%] rounded-lg px-2 leading-tight text-neutral-100 ring-2 ring-neutral-800 ${character.gender === "Male" ? "bg-blue-600" : character.gender === "Female" ? "bg-orange-700" : "bg-neutral-600"}`}
+          className={`absolute top-2 right-2 max-w-[48%] rounded-lg px-2 leading-tight text-neutral-100 ring-2 ring-neutral-800 ${gender === "Male" ? "bg-blue-600" : gender === "Female" ? "bg-orange-700" : "bg-neutral-600"}`}
         >
           {gender}
         </span>

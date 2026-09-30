@@ -28,6 +28,7 @@ export default function Pages({
       className="mt-auto flex items-center justify-center gap-2"
     >
       <button
+        aria-label="Previous page"
         disabled={isLoading || currentPage === 1}
         onClick={() => handlePageChange(currentPage - 1)}
         className={`${style}`}
@@ -38,10 +39,10 @@ export default function Pages({
       {startPage > 1 && (
         <>
           <button
-            disabled={isLoading}
-            aria-current="1"
-            className={`flex size-6 items-center justify-center sm:size-10 ${style}`}
+            disabled={isLoading || currentPage === 1}
             onClick={() => handlePageChange(1)}
+            aria-current={currentPage === 1 ? "page" : undefined}
+            className={`flex size-6 items-center justify-center sm:size-10 ${style}`}
           >
             1
           </button>
@@ -52,16 +53,17 @@ export default function Pages({
       {visiblePages.map((page) => (
         <button
           key={page}
-          disabled={isLoading}
-          aria-current={page}
+          disabled={isLoading || currentPage === page}
           onClick={() => handlePageChange(page)}
-          className={`flex size-6 items-center justify-center sm:size-10 ${style} ${currentPage === page ? "scale-113 text-xl [text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] hover:scale-113" : null}`}
+          aria-current={currentPage === page ? "page" : undefined}
+          className={`flex size-6 items-center justify-center sm:size-10 ${style} ${currentPage === page ? "scale-113 text-xl [text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] hover:scale-113" : ""}`}
         >
           {page}
         </button>
       ))}
 
       <button
+        aria-label="Next page"
         disabled={isLoading || currentPage === pages}
         onClick={() => handlePageChange(currentPage + 1)}
         className={`${style}`}

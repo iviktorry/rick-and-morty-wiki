@@ -5,6 +5,7 @@ export default function FilterOption({
   handleChange,
   defaultOption,
   isLoading,
+  value,
 }) {
   return (
     <div className="flex flex-1 items-center gap-2">
@@ -13,8 +14,9 @@ export default function FilterOption({
       </label>
 
       <select
-        name={label}
+        name={id}
         id={id}
+        value={value}
         disabled={isLoading}
         onChange={(e) => handleChange(e.target.value)}
         className="h-8 w-full min-w-38 rounded-lg py-1 text-center ring-2 ring-neutral-800 disabled:cursor-not-allowed disabled:opacity-40"

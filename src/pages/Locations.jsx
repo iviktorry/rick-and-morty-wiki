@@ -53,7 +53,6 @@ export function LocationCard({ location }) {
               status={character.status}
               gender={character.gender}
               species={character.species}
-              character={character}
               image={character.image}
               origin={character.origin.name}
               location={character.location.name}
@@ -132,7 +131,7 @@ export default function Locations() {
       });
 
     return () => controller.abort();
-  }, [selectedLocId, currentPage]);
+  }, [selectedLocId]);
 
   function handleChange(value) {
     setIsLoading(true);
@@ -148,6 +147,7 @@ export default function Locations() {
           isLoading={isLoading}
           options={locationList}
           handleChange={handleChange}
+          value={selectedLocId}
         />
       </Filters>
 
