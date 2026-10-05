@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
+import type { JSX } from "react";
 
-export default function Header() {
-  function navLinkStyles({ isActive }) {
+export default function Header(): JSX.Element {
+  function navLinkStyles({ isActive }: { isActive: boolean }): string {
     return `transition-all duration-300 ease-linear hover:[text-shadow:_0.5px_0_0_currentColor,_-0.5px_0_0_currentColor] focus-visible:[text-shadow:_0.5px_0_0_currentColor,_-0.5px_0_0_currentColor] ${isActive ? "[text-shadow:_0.5px_0_0_currentColor,_-0.5px_0_0_currentColor]" : ""} `;
   }
   return (

@@ -1,17 +1,31 @@
 import { useEffect, useState } from "react";
 import Pages from "../components/Pages";
-import Character from "../components/Character";
-import Filters from "../components/Filters";
+import CharacterEl from "../components/Character";
 import FilterOption from "../components/FilterOption";
+import Filters from "../components/Filters";
+import { JSX } from "react";
+import type { Character } from "./Characters";
 
-export function LocationCard({ location }) {
-  const characterIds = location.residents
+export type Episode = {
+  id: number;
+  name: string;
+  air_date: string;
+  episode: string;
+  url: string;
+  created: string;
+  characters: string[];
+};
+
+function EpisodeCard({ episode }: { episode: Episode }): JSX.Element {
+  const characterIds = episode.characters
     .map((url) => url.split("/").pop())
     .filter(Boolean);
 
-  const [characters, setCharacters] = useState([]);
-  const [charError, setCharError] = useState(null);
-  const [isCharLoading, setIsCharLoading] = useState(characterIds.length > 0);
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [isCharLoading, setIsCharLoading] = useState<boolean>(
+    characterIds.length > 0,
+  );
+  const [charError, setCharError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -31,8 +45,8 @@ export function LocationCard({ location }) {
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
-          console.error(`Fetch error: ${error}`);
-          setCharError("Failed to load residents for this location.");
+          console.error(`Fetch error ${error}`);
+          setCharError("Failed to load characters for this episode.");
         }
       })
       .finally(() => {
@@ -42,23 +56,23 @@ export function LocationCard({ location }) {
       });
 
     return () => controller.abort();
-  }, [location.residents, characterIds]);
+  }, [episode.characters, characterIds]);
 
   return (
     <div className="flex flex-1 flex-col items-center gap-4 text-center">
       <h2 className="text-lg font-medium">
-        {location.name}: {location.type}
+        {episode.episode}: {episode.name}
       </h2>
 
-      {isCharLoading && <p>Loading characters...</p>}
+      {isCharLoading && <p>Loading...</p>}
       {!isCharLoading && charError && <p>{charError}</p>}
       {!isCharLoading && !charError && characters.length === 0 && (
-        <p>There are no residents in this location.</p>
+        <p>There are no characters in this episode.</p>
       )}
       {!isCharLoading && !charError && characters.length > 0 && (
         <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {characters.map((character) => (
-            <Character
+          {characters.map((character: Character): JSX.Element => (
+            <CharacterEl
               key={character.id}
               id={character.id}
               name={character.name}
@@ -76,16 +90,16 @@ export function LocationCard({ location }) {
   );
 }
 
-export default function Locations() {
-  const [locationList, setLocationList] = useState([]);
-  const [pages, setPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedLocId, setSelectedLocId] = useState(1);
-  const [currentLoc, setCurrentLoc] = useState(null);
-  const [error, setError] = useState(null);
+export default function Episodes(): JSX.Element {
+  const [episodesList, setEpisodesList] = useState<Episode[]>([]);
+  const [pages, setPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedEpId, setSelectedEpId] = useState<number>(1);
+  const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  function handlePageChange(newPage) {
+  function handlePageChange(newPage: number): void {
     setError(null);
     setIsLoading(true);
     setCurrentPage(newPage);
@@ -93,26 +107,26 @@ export default function Locations() {
 
   useEffect(() => {
     const controller = new AbortController();
-    document.title = "Locations | Wiki";
+    document.title = "Episodes | Wiki";
 
-    fetch(`https://rickandmortyapi.com/api/location?page=${currentPage}`, {
+    fetch(`https://rickandmortyapi.com/api/episode?page=${currentPage}`, {
       signal: controller.signal,
     })
       .then((res) => {
-        if (!res.ok) throw new Error(`server error: ${res.status}`);
+        if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
         return res.json();
       })
       .then((res) => {
-        setLocationList(res.results);
+        setEpisodesList(res.results);
         setPages(res.info.pages);
         if (res.results.length > 0) {
-          setSelectedLocId(res.results[0].id);
+          setSelectedEpId(res.results[0].id);
         }
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
-          setError("Could not load locations. Please try again.");
+          setError("Could not load episodes. Please try again.");
         }
       });
 
@@ -122,15 +136,15 @@ export default function Locations() {
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch(`https://rickandmortyapi.com/api/location/${selectedLocId}`, {
+    fetch(`https://rickandmortyapi.com/api/episode/${selectedEpId}`, {
       signal: controller.signal,
     })
       .then((res) => {
-        if (!res.ok) throw new Error(`server error: ${res.status}`);
+        if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
         return res.json();
       })
       .then((res) => {
-        setCurrentLoc(res);
+        setCurrentEpisode(res);
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
@@ -144,33 +158,33 @@ export default function Locations() {
       });
 
     return () => controller.abort();
-  }, [selectedLocId]);
+  }, [selectedEpId]);
 
-  function handleChange(value) {
+  function handleFilterChange(value: number): void {
     setError(null);
     setIsLoading(true);
-    setSelectedLocId(value);
+    setSelectedEpId(value);
   }
 
   return (
     <section className="flex flex-1 flex-col items-center gap-10">
       <Filters>
         <FilterOption
-          label="Choose location"
-          id="location"
+          label="Choose an episode"
+          id="episode"
           isLoading={isLoading}
-          options={locationList}
-          handleChange={handleChange}
-          value={selectedLocId}
+          options={episodesList}
+          handleChange={handleFilterChange}
+          value={selectedEpId}
         />
       </Filters>
 
-      <h1 className="sr-only">Locations</h1>
+      <h1 className="sr-only">Episodes</h1>
 
       {isLoading && <p>Loading...</p>}
       {!isLoading && error && <p>{error}</p>}
-      {!isLoading && !error && currentLoc && (
-        <LocationCard key={currentLoc.id} location={currentLoc} />
+      {!isLoading && !error && currentEpisode && (
+        <EpisodeCard key={currentEpisode.id} episode={currentEpisode} />
       )}
 
       <Pages

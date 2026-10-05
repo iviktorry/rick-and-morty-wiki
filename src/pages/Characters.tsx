@@ -1,36 +1,63 @@
 import { useEffect, useState } from "react";
 import Pages from "../components/Pages";
-import Character from "../components/Character";
+import CharacterEl from "../components/Character";
 import SearchBar from "../components/SearchBar";
 import Filters from "../components/Filters";
 import FilterOption from "../components/FilterOption";
+import type { JSX, SubmitEvent } from "react";
+import { Dispatch, SetStateAction } from "react";
 
-export default function Characters() {
-  const [characters, setCharacters] = useState([]);
-  const [pages, setPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchText, setSearchText] = useState("");
-  const [status, setStatus] = useState("");
-  const [gender, setGender] = useState("");
-  const [species, setSpecies] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+export type Character = {
+  id: number;
+  name: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+  origin: {
+    name: string;
+    url: string;
+  };
+  location: {
+    name: string;
+    url: string;
+  };
+  image: string;
+  episode: string[];
+  url: string;
+  created: string;
+};
 
-  function handleSearch(event) {
+export default function Characters(): JSX.Element {
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [pages, setPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchText, setSearchText] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+  const [species, setSpecies] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  function handleSearch(event: SubmitEvent) {
     event.preventDefault();
     setError(null);
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget as HTMLFormElement);
+    const searchValue = formData.get("search");
     setCurrentPage(1);
-    setSearchText(formData.get("search"));
+    setSearchText(String(searchValue || ""));
   }
 
-  function handleFilterChange(setterFunc, value) {
+  function handleFilterChange(
+    setterFunc: Dispatch<SetStateAction<string>>,
+    value: string,
+  ): void {
     setError(null);
     setCurrentPage(1);
     setterFunc(value);
   }
 
-  function handlePageChange(newPage) {
+  function handlePageChange(newPage: number): void {
     setError(null);
     setIsLoading(true);
     setCurrentPage(newPage);
@@ -41,7 +68,7 @@ export default function Characters() {
     document.title = "Characters | Wiki";
 
     const params = new URLSearchParams();
-    params.set("page", currentPage);
+    params.set("page", String(currentPage));
     if (status) params.set("status", status);
     if (gender) params.set("gender", gender);
     if (species) params.set("species", species);
@@ -130,8 +157,8 @@ export default function Characters() {
       )}
       {!isLoading && !error && characters.length > 0 && (
         <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {characters.map((character) => (
-            <Character
+          {characters.map((character: Character) => (
+            <CharacterEl
               key={character.id}
               id={character.id}
               name={character.name}

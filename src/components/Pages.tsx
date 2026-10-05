@@ -1,25 +1,37 @@
+import type { JSX } from "react";
+
+type PagesProps = {
+  pages: number;
+  currentPage: number;
+  isLoading: boolean;
+  handlePageChange: (page: number) => void;
+};
+
 export default function Pages({
   pages,
   currentPage,
   isLoading,
   handlePageChange,
-}) {
+}: PagesProps): JSX.Element | null {
   if (pages <= 1) return null;
   const maxVisibleButtons = 5;
 
-  let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
-  let endPage = startPage + maxVisibleButtons - 1;
+  let startPage: number = Math.max(
+    1,
+    currentPage - Math.floor(maxVisibleButtons / 2),
+  );
+  let endPage: number = startPage + maxVisibleButtons - 1;
 
   if (endPage > pages) {
     endPage = pages;
     startPage = Math.max(1, endPage - maxVisibleButtons + 1);
   }
 
-  const visiblePages = Array.from(
+  const visiblePages: number[] = Array.from(
     { length: endPage - startPage + 1 },
     (_, index) => startPage + index,
   );
-  const style =
+  const style: string =
     "transition-all duration-300 ease-linear lg:text-lg hover:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] focus-visible:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] disabled:opacity-50 disabled:hover:cursor-not-allowed";
 
   return (
@@ -50,7 +62,7 @@ export default function Pages({
         </>
       )}
 
-      {visiblePages.map((page) => (
+      {visiblePages.map((page: number): JSX.Element => (
         <button
           key={page}
           disabled={isLoading || currentPage === page}
