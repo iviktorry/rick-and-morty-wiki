@@ -1,12 +1,20 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import type { JSX } from "react";
 
-export default function Home() {
+type Category = {
+  title: string;
+  desc: string;
+  path: string;
+  image: string;
+};
+
+export default function Home(): JSX.Element {
   useEffect(() => {
     document.title = "Rick and Morty Wiki";
   }, []);
 
-  const categories = [
+  const categories: Category[] = [
     {
       title: "Characters",
       desc: "Meet 800+ dimension wanderers, aliens and clones",
@@ -32,7 +40,7 @@ export default function Home() {
         Welcome to the Rick and Morty Wiki!
       </h1>
       <div className="flex flex-col justify-between gap-6 lg:flex-row lg:gap-10">
-        {categories.map((cat) => (
+        {categories.map((cat: Category): JSX.Element => (
           <Link
             to={cat.path}
             key={cat.title}

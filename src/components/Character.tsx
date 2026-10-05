@@ -1,3 +1,16 @@
+import type { JSX } from "react";
+
+export type CharacterProps = {
+  id: number;
+  image: string;
+  status: string;
+  gender: string;
+  name: string;
+  species: string;
+  origin: string;
+  location: string;
+};
+
 export default function Character({
   id,
   image,
@@ -7,7 +20,7 @@ export default function Character({
   species,
   origin,
   location,
-}) {
+}: CharacterProps): JSX.Element {
   return (
     <article className="aspect-3/5 w-75 min-w-0 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
       <div className="relative size-75 w-full min-w-0 border-b-2 border-neutral-800">

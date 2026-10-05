@@ -1,10 +1,18 @@
 import { Search, X } from "lucide-react";
+import type { JSX, SubmitEvent } from "react";
+import { Dispatch, SetStateAction } from "react";
+
+type SearchBarProps = {
+  handleSearch: (event: SubmitEvent) => void;
+  setSearchText: Dispatch<SetStateAction<string>>;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+};
 
 export default function SearchBar({
   handleSearch,
   setSearchText,
   setCurrentPage,
-}) {
+}: SearchBarProps): JSX.Element {
   return (
     <form
       onReset={() => {
