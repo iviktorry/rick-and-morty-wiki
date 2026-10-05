@@ -1,27 +1,29 @@
 # Rick and Morty Wiki
 
-A responsive single-page wiki for browsing characters, locations, and episodes from the Rick and Morty universe. The app uses the public [Rick and Morty API](https://rickandmortyapi.com/documentation) and provides a small client-side interface for searching, filtering, paging through results, and viewing related characters.
+A responsive single-page wiki for browsing characters, locations, and episodes from the Rick and Morty universe. The app uses the public [Rick and Morty API](https://rickandmortyapi.com/documentation) to fetch data dynamically via API requests for searching, filtering, and pagination, providing a clean client-side interface for exploring characters and their related entities.
 
 ![Application Interface Screenshot](./src/assets/screenshot.png)
 
 ## 🔗 Links
 
 **Live Demo:** [View Live Site](https://rick-and-morty-wiki-app.vercel.app/)  
-**GitHub Repository:** [View Source Code](https://github.com/iviktorry/rick-and-morty-wiki!)
+**GitHub Repository:** [View Source Code](https://github.com/iviktorry/rick-and-morty-wiki)
 
 ---
 
 ## Features
 
+## Features
+
 - **Home page:** entry points to the character, location, and episode sections, each with a local category image.
 - **Character browser:** paged character cards with portrait, ID, name, status, gender, species, origin, and last known location.
-- **Character search:** submit a name query to the API; the clear control resets the query and returns to page one.
-- **Character filters:** combine status, gender, and species filters. Changing a filter or search starts again from the first results page.
-- **Locations:** page through locations, choose one from the current page, and see its type and resident character cards.
-- **Episodes:** page through episodes, choose one from the current page, and see its episode code, title, and character cards.
-- **Pagination:** previous/next controls and a sliding window of up to five page numbers, with unavailable actions disabled.
+- **Character search:** submits a name query as server-side URL parameters directly to the API; the clear control resets the query parameters and returns to page one.
+- **Character filters:** sends combined status, gender, and species filter parameters as API queries. Updating any filter triggers a new API request and resets pagination to page one.
+- **Locations:** page through locations fetched from the API, choose one from the current page, and view its type and resident character cards.
+- **Episodes:** page through episodes fetched from the API, choose one from the current page, and view its episode code, title, and character cards.
+- **Pagination:** previous/next controls and a sliding window of up to five page numbers, requesting the corresponding page data directly from the server.
 - **Navigation and fallback:** React Router links between sections, active navigation styling, and a custom not-found page with a return-home link.
-- **Loading and error feedback:** the character directory has loading, error, and empty-result states; location/episode detail components also define loading, error, and empty-resident states, with the empty-resident edge case noted below.
+- **Loading and error feedback:** the character directory has loading, error, and empty-result states based on API responses; location/episode detail components also define loading, error, and empty-resident states.
 - **Responsive layout:** Tailwind breakpoints adjust navigation and data grids for smaller and larger screens.
 - **Reduced motion:** the global stylesheet disables transitions when the user prefers reduced motion.
 - **Page titles:** the document title is updated for the home page, data sections, and not-found route.
@@ -40,9 +42,9 @@ A responsive single-page wiki for browsing characters, locations, and episodes f
 
 ### Application
 
-- **React 19** (`react`, `react-dom`) — component-based UI and state/effect hooks.
-- **React Router DOM 7** — browser history, links, and declarative route matching. `BrowserRouter` wraps the app in `src/main.jsx`.
-- **Vite 8** — local development server and production bundler.
+- **TypeScript** & **React 19** (`react`, `react-dom`) — fully type-safe component-based UI rewritten from JSX to TSX for strict type safety across props, hooks, custom generics, and form events.
+- **React Router DOM 7** — browser history, links, and declarative route matching. `BrowserRouter` wraps the app in `src/main.tsx`.
+- **Vite 8** — local development server and production bundler, configured with `vite-env.d.ts` for static asset and media module declarations (e.g., `.gif` files).
 - **Tailwind CSS 4** — utility-first styles, imported in `src/index.css` with `@import "tailwindcss"`.
 - **Rick and Morty API** — external source for all character, location, and episode data. The app has no custom backend or database.
 - **Lucide React** — the search and clear (`Search`, `X`) icons in the character search form.
@@ -50,7 +52,7 @@ A responsive single-page wiki for browsing characters, locations, and episodes f
 
 ### Developer tools
 
-- **ESLint 10** — linting through the flat config in `eslint.config.js`, with the recommended JavaScript rules, React Hooks rules, and React Refresh/Vite rules.
+- **ESLint 10** — linting through the flat config in `eslint.config.js`, with the recommended TypeScript and React rules.
 - **Prettier Tailwind CSS plugin** (`prettier-plugin-tailwindcss`) — configured to sort Tailwind class names when Prettier runs.
 - **Vercel rewrite** — `vercel.json` sends requests for app paths to `index.html`, allowing the client-side routes to load on a Vercel deployment.
 
