@@ -23,7 +23,7 @@ A responsive single-page wiki for browsing characters, locations, and episodes f
 - **Episodes:** page through episodes fetched from the API, choose one from the current page, and view its episode code, title, and character cards.
 - **Pagination:** previous/next controls and a sliding window of up to five page numbers, requesting the corresponding page data directly from the server.
 - **Navigation and fallback:** React Router links between sections, active navigation styling, and a custom not-found page with a return-home link.
-- **Loading and error feedback:** the character directory has loading, error, and empty-result states based on API responses; location/episode detail components also define loading, error, and empty-resident states.
+- **Loading and error feedback:** the character directory shows loading, error, and empty-result states based on API responses. Location and episode pages track list and selected-item loading separately, report request errors, and show loading, error, or empty states for related character cards.
 - **Responsive layout:** Tailwind breakpoints adjust navigation and data grids for smaller and larger screens.
 - **Reduced motion:** the global stylesheet disables transitions when the user prefers reduced motion.
 - **Page titles:** the document title is updated for the home page, data sections, and not-found route.
