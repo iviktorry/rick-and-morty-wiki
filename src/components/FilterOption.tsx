@@ -22,7 +22,7 @@ export default function FilterOption<T extends string | number>({
   isLoading,
 }: FilterOptionProps<T>): JSX.Element {
   return (
-    <div className="flex flex-1 items-center gap-2">
+    <div className="flex w-full flex-1 items-center gap-2">
       <label htmlFor={String(id)} className="font-bold whitespace-nowrap">
         {label}:
       </label>
@@ -39,7 +39,7 @@ export default function FilterOption<T extends string | number>({
           ) as T;
           handleChange(parsedVal);
         }}
-        className="h-8 w-full min-w-38 rounded-lg py-1 text-center ring-2 ring-neutral-800 disabled:cursor-not-allowed disabled:opacity-40"
+        className="h-8 w-full min-w-38 flex-1 rounded-lg py-1 text-center ring-2 ring-neutral-800 disabled:cursor-not-allowed disabled:opacity-40"
       >
         {defaultOption && <option value="">{defaultOption}</option>}
         {options.map(
