@@ -26,6 +26,7 @@ export default function Character({
       <div className="relative size-75 w-full min-w-0 border-b-2 border-neutral-800">
         <img
           src={image}
+          loading="lazy"
           alt={`${name}'s portrait image`}
           className="size-full object-cover"
         />

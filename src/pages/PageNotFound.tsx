@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import portalGif from "../assets/portal-gif.gif";
+import portalImg from "../assets/portal.png";
 import { useEffect } from "react";
 import type { JSX } from "react";
 
@@ -15,13 +16,10 @@ export default function PageNotFound(): JSX.Element {
         It looks like you jumped into the wrong portal, mortal. This page does
         not exist in any of the known dimensions of the Multiverse.
       </p>
-      <div className="size-73 overflow-hidden sm:size-100">
-        <img
-          src={portalGif}
-          alt="green portal gif"
-          className="sm:object-none"
-        />
-      </div>
+      <picture className="flex size-73 overflow-hidden sm:size-100">
+        <source srcSet={portalImg} media="(prefers-reduced-motion: reduce)" />
+        <img src={portalGif} alt="green portal" className="sm:object-none" />
+      </picture>
       <Link
         to="/"
         className="transition-all duration-300 ease-linear hover:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor] focus-visible:[text-shadow:0.5px_0_0_currentColor,-0.5px_0_0_currentColor]"
