@@ -8,8 +8,8 @@ type FilterOptionProps<T extends string | number> = {
   options: string[] | Location[] | Episode[];
   handleChange: (value: T) => void;
   defaultOption?: string;
-  isLoading: boolean;
   value: T;
+  isLoading: boolean;
 };
 
 export default function FilterOption<T extends string | number>({
@@ -18,8 +18,8 @@ export default function FilterOption<T extends string | number>({
   options = [],
   handleChange,
   defaultOption,
-  isLoading,
   value,
+  isLoading,
 }: FilterOptionProps<T>): JSX.Element {
   return (
     <div className="flex flex-1 items-center gap-2">
@@ -34,7 +34,9 @@ export default function FilterOption<T extends string | number>({
         disabled={isLoading}
         onChange={(e) => {
           const val = e.target.value;
-          const parsedVal = (typeof val === "number" ? Number(val) : val) as T;
+          const parsedVal = (
+            typeof value === "number" ? Number(val) : val
+          ) as T;
           handleChange(parsedVal);
         }}
         className="h-8 w-full min-w-38 rounded-lg py-1 text-center ring-2 ring-neutral-800 disabled:cursor-not-allowed disabled:opacity-40"
