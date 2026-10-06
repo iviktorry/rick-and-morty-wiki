@@ -32,31 +32,30 @@ function EpisodeCard({ episode }: { episode: Episode }): JSX.Element {
 
     if (!characterIds || characterIds.length === 0) return;
 
-    fetch(
-      `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
-      { signal: controller.signal },
-    )
-      .then((res) => {
+    async function getEpisodeCharacters(): Promise<void> {
+      try {
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
+          { signal: controller.signal },
+        );
         if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
-        return res.json();
-      })
-      .then((res) => {
-        setCharacters(Array.isArray(res) ? res : [res]);
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
+        const data: Character[] = await res.json();
+        setCharacters(Array.isArray(data) ? data : [data]);
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
           console.error(`Fetch error ${error}`);
           setCharError("Failed to load characters for this episode.");
         }
-      })
-      .finally(() => {
+      } finally {
         if (!controller.signal.aborted) {
           setIsCharLoading(false);
         }
-      });
+      }
+    }
 
+    getEpisodeCharacters();
     return () => controller.abort();
-  }, [episode.characters, characterIds]);
+  }, [episode.characters]);
 
   return (
     <div className="flex flex-1 flex-col items-center gap-4 text-center">
@@ -109,54 +108,60 @@ export default function Episodes(): JSX.Element {
     const controller = new AbortController();
     document.title = "Episodes | Wiki";
 
-    fetch(`https://rickandmortyapi.com/api/episode?page=${currentPage}`, {
-      signal: controller.signal,
-    })
-      .then((res) => {
+    async function getEpisodePages(): Promise<void> {
+      try {
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/episode?page=${currentPage}`,
+          {
+            signal: controller.signal,
+          },
+        );
         if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
-        return res.json();
-      })
-      .then((res) => {
-        setEpisodesList(res.results);
-        setPages(res.info.pages);
-        if (res.results.length > 0) {
-          setSelectedEpId(res.results[0].id);
+        const data = await res.json();
+        setEpisodesList(data.results);
+        setPages(data.info.pages);
+        if (data.results.length > 0) {
+          setSelectedEpId(data.results[0].id);
         }
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
           setError("Could not load episodes. Please try again.");
         }
-      });
+      }
+    }
 
+    getEpisodePages();
     return () => controller.abort();
   }, [currentPage]);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch(`https://rickandmortyapi.com/api/episode/${selectedEpId}`, {
-      signal: controller.signal,
-    })
-      .then((res) => {
+    async function getCurrentEpisode(): Promise<void> {
+      try {
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/episode/${selectedEpId}`,
+          {
+            signal: controller.signal,
+          },
+        );
         if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
-        return res.json();
-      })
-      .then((res) => {
-        setCurrentEpisode(res);
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
+        const data: Episode = await res.json();
+        setCurrentEpisode(data);
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
+          setError(`Could not load selected episode. Please try again`);
         }
-      })
-      .finally(() => {
+      } finally {
         if (!controller.signal.aborted) {
           setIsLoading(false);
         }
-      });
+      }
+    }
 
+    getCurrentEpisode();
     return () => controller.abort();
   }, [selectedEpId]);
 

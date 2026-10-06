@@ -36,31 +36,30 @@ export function LocationCard({
 
     if (!characterIds || characterIds.length === 0) return;
 
-    fetch(
-      `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
-      { signal: controller.signal },
-    )
-      .then((res) => {
+    async function getLocationCharacters(): Promise<void> {
+      try {
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
+          { signal: controller.signal },
+        );
         if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
-        return res.json();
-      })
-      .then((res) => {
-        setCharacters(Array.isArray(res) ? res : [res]);
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
+        const data: Character[] = await res.json();
+        setCharacters(Array.isArray(data) ? data : [data]);
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
           setCharError("Failed to load residents for this location.");
         }
-      })
-      .finally(() => {
+      } finally {
         if (!controller.signal.aborted) {
           setIsCharLoading(false);
         }
-      });
+      }
+    }
 
+    getLocationCharacters();
     return () => controller.abort();
-  }, [location.residents, characterIds]);
+  }, [location.residents]);
 
   return (
     <div className="flex flex-1 flex-col items-center gap-4 text-center">
@@ -113,54 +112,60 @@ export default function Locations(): JSX.Element {
     const controller = new AbortController();
     document.title = "Locations | Wiki";
 
-    fetch(`https://rickandmortyapi.com/api/location?page=${currentPage}`, {
-      signal: controller.signal,
-    })
-      .then((res) => {
+    async function getLocationPages(): Promise<void> {
+      try {
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/location?page=${currentPage}`,
+          {
+            signal: controller.signal,
+          },
+        );
         if (!res.ok) throw new Error(`server error: ${res.status}`);
-        return res.json();
-      })
-      .then((res) => {
-        setLocationList(res.results);
-        setPages(res.info.pages);
-        if (res.results.length > 0) {
-          setSelectedLocId(res.results[0].id);
+        const data = await res.json();
+        setLocationList(data.results);
+        setPages(data.info.pages);
+        if (data.results.length > 0) {
+          setSelectedLocId(data.results[0].id);
         }
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
           setError("Could not load locations. Please try again.");
         }
-      });
+      }
+    }
 
+    getLocationPages();
     return () => controller.abort();
   }, [currentPage]);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch(`https://rickandmortyapi.com/api/location/${selectedLocId}`, {
-      signal: controller.signal,
-    })
-      .then((res) => {
+    async function getCurrentLocation(): Promise<void> {
+      try {
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/location/${selectedLocId}`,
+          {
+            signal: controller.signal,
+          },
+        );
         if (!res.ok) throw new Error(`server error: ${res.status}`);
-        return res.json();
-      })
-      .then((res) => {
-        setCurrentLoc(res);
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
+        const data: Location = await res.json();
+        setCurrentLoc(data);
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
           console.error(`Fetch error: ${error}`);
+          setError(`Could not load selected location. Please try again`);
         }
-      })
-      .finally(() => {
+      } finally {
         if (!controller.signal.aborted) {
           setIsLoading(false);
         }
-      });
+      }
+    }
 
+    getCurrentLocation();
     return () => controller.abort();
   }, [selectedLocId]);
 

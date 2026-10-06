@@ -74,35 +74,37 @@ export default function Characters(): JSX.Element {
     if (species) params.set("species", species);
     if (searchText) params.set("name", searchText);
 
-    fetch(`https://rickandmortyapi.com/api/character?${params.toString()}`, {
-      signal: controller.signal,
-    })
-      .then((res) => {
+    async function getCharactersInfo(): Promise<void> {
+      try {
+        const res = await fetch(
+          `https://rickandmortyapi.com/api/character?${params.toString()}`,
+          {
+            signal: controller.signal,
+          },
+        );
         if (res.status === 404) {
           setCharacters([]);
           setPages(0);
-          return null;
+          return;
         }
-        if (!res.ok) throw new Error(`server mistake: ${res.status}`);
-        return res.json();
-      })
-      .then((res) => {
-        if (!res) return;
-        setCharacters(res.results);
-        setPages(res.info.pages);
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
-          console.error(`Uploading error: ${error}`);
+        if (!res.ok) throw new Error(`server mistake ${res.status}`);
+        const data = await res.json();
+        if (!data) return;
+        setCharacters(data.results);
+        setPages(data.info.pages);
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
+          console.error(`uploading error: ${error}`);
           setError("Could not load characters. Please try again.");
         }
-      })
-      .finally(() => {
+      } finally {
         if (!controller.signal.aborted) {
           setIsLoading(false);
         }
-      });
+      }
+    }
 
+    getCharactersInfo();
     return () => controller.abort();
   }, [currentPage, gender, species, status, searchText]);
 
