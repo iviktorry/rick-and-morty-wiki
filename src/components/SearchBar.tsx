@@ -6,18 +6,21 @@ type SearchBarProps = {
   handleSearch: (event: SubmitEvent) => void;
   setSearchText: Dispatch<SetStateAction<string>>;
   setCurrentPage: Dispatch<SetStateAction<number>>;
+  setError: Dispatch<SetStateAction<string | null>>;
 };
 
 export default function SearchBar({
   handleSearch,
   setSearchText,
   setCurrentPage,
+  setError,
 }: SearchBarProps): JSX.Element {
   return (
     <form
       onReset={() => {
         setSearchText("");
         setCurrentPage(1);
+        setError(null);
       }}
       onSubmit={handleSearch}
       className="relative mx-auto flex h-8 w-full gap-3 md:w-2xl"

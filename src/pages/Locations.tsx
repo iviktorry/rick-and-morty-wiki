@@ -21,15 +21,13 @@ export function LocationCard({
 }: {
   location: Location;
 }): JSX.Element {
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [charError, setCharError] = useState<string | null>(null);
+  const [isCharLoading, setIsCharLoading] = useState<boolean>(false);
+
   const characterIds = location.residents
     .map((url) => url.split("/").pop())
     .filter(Boolean);
-
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [charError, setCharError] = useState<string | null>(null);
-  const [isCharLoading, setIsCharLoading] = useState<boolean>(
-    characterIds.length > 0,
-  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -38,12 +36,13 @@ export function LocationCard({
 
     async function getLocationCharacters(): Promise<void> {
       try {
+        setIsCharLoading(true);
         const res = await fetch(
           `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
           { signal: controller.signal },
         );
         if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
-        const data: Character[] = await res.json();
+        const data: Character | Character[] = await res.json();
         setCharacters(Array.isArray(data) ? data : [data]);
       } catch (error) {
         if (error instanceof Error && error.name !== "AbortError") {
@@ -97,14 +96,14 @@ export default function Locations(): JSX.Element {
   const [locationList, setLocationList] = useState([]);
   const [pages, setPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isListLoading, setIsListLoading] = useState<boolean>(true);
+  const [isSelectedLoading, setIsSelectedLoading] = useState<boolean>(true);
   const [selectedLocId, setSelectedLocId] = useState<number>(1);
   const [currentLoc, setCurrentLoc] = useState<Location | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   function handlePageChange(newPage: number): void {
     setError(null);
-    setIsLoading(true);
     setCurrentPage(newPage);
   }
 
@@ -114,6 +113,7 @@ export default function Locations(): JSX.Element {
 
     async function getLocationPages(): Promise<void> {
       try {
+        setIsListLoading(true);
         const res = await fetch(
           `https://rickandmortyapi.com/api/location?page=${currentPage}`,
           {
@@ -132,6 +132,10 @@ export default function Locations(): JSX.Element {
           console.error(`Fetch error: ${error}`);
           setError("Could not load locations. Please try again.");
         }
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsListLoading(false);
+        }
       }
     }
 
@@ -144,6 +148,7 @@ export default function Locations(): JSX.Element {
 
     async function getCurrentLocation(): Promise<void> {
       try {
+        setIsSelectedLoading(true);
         const res = await fetch(
           `https://rickandmortyapi.com/api/location/${selectedLocId}`,
           {
@@ -160,7 +165,7 @@ export default function Locations(): JSX.Element {
         }
       } finally {
         if (!controller.signal.aborted) {
-          setIsLoading(false);
+          setIsSelectedLoading(false);
         }
       }
     }
@@ -171,7 +176,6 @@ export default function Locations(): JSX.Element {
 
   function handleFilterChange(value: number): void {
     setError(null);
-    setIsLoading(true);
     setSelectedLocId(value);
   }
 
@@ -181,8 +185,8 @@ export default function Locations(): JSX.Element {
         <FilterOption
           label="Choose location"
           id="location"
-          isLoading={isLoading}
           options={locationList}
+          isLoading={isListLoading || isSelectedLoading}
           handleChange={handleFilterChange}
           value={selectedLocId}
         />
@@ -190,16 +194,16 @@ export default function Locations(): JSX.Element {
 
       <h1 className="sr-only">Locations</h1>
 
-      {isLoading && <p>Loading...</p>}
-      {!isLoading && error && <p>{error}</p>}
-      {!isLoading && !error && currentLoc && (
+      {(isListLoading || isSelectedLoading) && <p>Loading...</p>}
+      {!isListLoading && !isSelectedLoading && error && <p>{error}</p>}
+      {!isListLoading && !isSelectedLoading && !error && currentLoc && (
         <LocationCard key={currentLoc.id} location={currentLoc} />
       )}
 
       <Pages
         pages={pages}
         currentPage={currentPage}
-        isLoading={isLoading}
+        isLoading={isListLoading}
         handlePageChange={handlePageChange}
       />
     </section>

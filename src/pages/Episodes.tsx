@@ -17,15 +17,13 @@ export type Episode = {
 };
 
 function EpisodeCard({ episode }: { episode: Episode }): JSX.Element {
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [isCharLoading, setIsCharLoading] = useState<boolean>(false);
+  const [charError, setCharError] = useState<string | null>(null);
+
   const characterIds = episode.characters
     .map((url) => url.split("/").pop())
     .filter(Boolean);
-
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [isCharLoading, setIsCharLoading] = useState<boolean>(
-    characterIds.length > 0,
-  );
-  const [charError, setCharError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -34,12 +32,13 @@ function EpisodeCard({ episode }: { episode: Episode }): JSX.Element {
 
     async function getEpisodeCharacters(): Promise<void> {
       try {
+        setIsCharLoading(true);
         const res = await fetch(
           `https://rickandmortyapi.com/api/character/${characterIds.join(",")}`,
           { signal: controller.signal },
         );
         if (!res.ok) throw new Error(`Server mistake: ${res.status}`);
-        const data: Character[] = await res.json();
+        const data: Character | Character[] = await res.json();
         setCharacters(Array.isArray(data) ? data : [data]);
       } catch (error) {
         if (error instanceof Error && error.name !== "AbortError") {
@@ -93,14 +92,14 @@ export default function Episodes(): JSX.Element {
   const [episodesList, setEpisodesList] = useState<Episode[]>([]);
   const [pages, setPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isListLoading, setIsListLoading] = useState<boolean>(true);
+  const [isSelectedLoading, setIsSelectedLoading] = useState<boolean>(true);
   const [selectedEpId, setSelectedEpId] = useState<number>(1);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   function handlePageChange(newPage: number): void {
     setError(null);
-    setIsLoading(true);
     setCurrentPage(newPage);
   }
 
@@ -110,6 +109,7 @@ export default function Episodes(): JSX.Element {
 
     async function getEpisodePages(): Promise<void> {
       try {
+        setIsListLoading(true);
         const res = await fetch(
           `https://rickandmortyapi.com/api/episode?page=${currentPage}`,
           {
@@ -128,6 +128,10 @@ export default function Episodes(): JSX.Element {
           console.error(`Fetch error: ${error}`);
           setError("Could not load episodes. Please try again.");
         }
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsListLoading(false);
+        }
       }
     }
 
@@ -140,6 +144,7 @@ export default function Episodes(): JSX.Element {
 
     async function getCurrentEpisode(): Promise<void> {
       try {
+        setIsSelectedLoading(true);
         const res = await fetch(
           `https://rickandmortyapi.com/api/episode/${selectedEpId}`,
           {
@@ -156,7 +161,7 @@ export default function Episodes(): JSX.Element {
         }
       } finally {
         if (!controller.signal.aborted) {
-          setIsLoading(false);
+          setIsSelectedLoading(false);
         }
       }
     }
@@ -167,7 +172,6 @@ export default function Episodes(): JSX.Element {
 
   function handleFilterChange(value: number): void {
     setError(null);
-    setIsLoading(true);
     setSelectedEpId(value);
   }
 
@@ -177,8 +181,8 @@ export default function Episodes(): JSX.Element {
         <FilterOption
           label="Choose an episode"
           id="episode"
-          isLoading={isLoading}
           options={episodesList}
+          isLoading={isListLoading || isSelectedLoading}
           handleChange={handleFilterChange}
           value={selectedEpId}
         />
@@ -186,16 +190,16 @@ export default function Episodes(): JSX.Element {
 
       <h1 className="sr-only">Episodes</h1>
 
-      {isLoading && <p>Loading...</p>}
-      {!isLoading && error && <p>{error}</p>}
-      {!isLoading && !error && currentEpisode && (
+      {(isListLoading || isSelectedLoading) && <p>Loading...</p>}
+      {!isListLoading && !isSelectedLoading && error && <p>{error}</p>}
+      {!isListLoading && !isSelectedLoading && !error && currentEpisode && (
         <EpisodeCard key={currentEpisode.id} episode={currentEpisode} />
       )}
 
       <Pages
         pages={pages}
         currentPage={currentPage}
-        isLoading={isLoading}
+        isLoading={isListLoading}
         handlePageChange={handlePageChange}
       />
     </section>

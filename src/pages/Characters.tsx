@@ -28,6 +28,16 @@ export type Character = {
   created: string;
 };
 
+type CharacterPageResponse = {
+  results: Character[];
+  info: {
+    pages: number;
+    count: number;
+    next: string | null;
+    prev: string | null;
+  };
+};
+
 export default function Characters(): JSX.Element {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [pages, setPages] = useState<number>(0);
@@ -36,7 +46,7 @@ export default function Characters(): JSX.Element {
   const [status, setStatus] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [species, setSpecies] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   function handleSearch(event: SubmitEvent) {
@@ -59,7 +69,6 @@ export default function Characters(): JSX.Element {
 
   function handlePageChange(newPage: number): void {
     setError(null);
-    setIsLoading(true);
     setCurrentPage(newPage);
   }
 
@@ -76,6 +85,7 @@ export default function Characters(): JSX.Element {
 
     async function getCharactersInfo(): Promise<void> {
       try {
+        setIsLoading(true);
         const res = await fetch(
           `https://rickandmortyapi.com/api/character?${params.toString()}`,
           {
@@ -88,8 +98,7 @@ export default function Characters(): JSX.Element {
           return;
         }
         if (!res.ok) throw new Error(`server mistake ${res.status}`);
-        const data = await res.json();
-        if (!data) return;
+        const data: CharacterPageResponse = await res.json();
         setCharacters(data.results);
         setPages(data.info.pages);
       } catch (error) {
@@ -114,32 +123,31 @@ export default function Characters(): JSX.Element {
         handleSearch={handleSearch}
         setSearchText={setSearchText}
         setCurrentPage={setCurrentPage}
+        setError={setError}
       />
       <Filters>
         <FilterOption
           label="Status"
           id="status"
+          value={status}
+          isLoading={isLoading}
           defaultOption="Not selected"
           options={["Alive", "Dead", "unknown"]}
-          isLoading={isLoading}
-          value={status}
           handleChange={(value) => handleFilterChange(setStatus, value)}
         />
         <FilterOption
           label="Gender"
           id="gender"
-          defaultOption="Not selected"
-          options={["Male", "Female", "Genderless", "unknown"]}
-          isLoading={isLoading}
           value={gender}
+          defaultOption="Not selected"
+          isLoading={isLoading}
+          options={["Male", "Female", "Genderless", "unknown"]}
           handleChange={(value) => handleFilterChange(setGender, value)}
         />
         <FilterOption
           label="Species"
           id="species"
           defaultOption="Not selected"
-          isLoading={isLoading}
-          value={species}
           options={[
             "Human",
             "Alien",
@@ -147,6 +155,8 @@ export default function Characters(): JSX.Element {
             "Poopybutthole",
             "Mythological Creature",
           ]}
+          value={species}
+          isLoading={isLoading}
           handleChange={(value) => handleFilterChange(setSpecies, value)}
         />
       </Filters>
