@@ -54,13 +54,14 @@ export default function Home(): JSX.Element {
               <img
                 src={cat.image}
                 alt=""
+                fetchPriority="high"
                 className="aspect-video size-full object-cover brightness-50"
               />
             </div>
 
-            <h3 className="absolute inset-x-0 bottom-5 text-center text-xl lg:text-2xl">
+            <h2 className="absolute inset-x-0 bottom-5 text-center text-xl lg:text-2xl">
               {cat.title}
-            </h3>
+            </h2>
           </Link>
         ))}
       </div>
