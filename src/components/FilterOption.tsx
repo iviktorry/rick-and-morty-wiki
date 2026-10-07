@@ -22,8 +22,10 @@ export default function FilterOption<T extends string | number>({
   isLoading,
 }: FilterOptionProps<T>): JSX.Element {
   return (
-    <div className="flex w-full flex-1 items-center gap-2">
-      <label htmlFor={String(id)} className="font-bold whitespace-nowrap">
+    <div
+      className={`flex w-full flex-1 flex-col items-center sm:flex-row sm:gap-2`}
+    >
+      <label htmlFor={String(id)} className="font-bold">
         {label}:
       </label>
 

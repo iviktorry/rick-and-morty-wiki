@@ -170,10 +170,11 @@ export default function Characters(): JSX.Element {
         )}
         {!isLoading && !error && characters.length > 0 && (
           <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {characters.map((character: Character) => (
+            {characters.map((character: Character, index: number) => (
               <CharacterEl
                 key={character.id}
                 id={character.id}
+                index={index}
                 name={character.name}
                 status={character.status}
                 gender={character.gender}

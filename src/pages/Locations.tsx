@@ -73,19 +73,22 @@ export function LocationCard({
       )}
       {!isCharLoading && !charError && characters.length > 0 && (
         <div className="grid w-fit grid-cols-1 gap-5 self-center sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {characters.map((character: Character): JSX.Element => (
-            <CharacterEl
-              key={character.id}
-              id={character.id}
-              name={character.name}
-              status={character.status}
-              gender={character.gender}
-              species={character.species}
-              image={character.image}
-              origin={character.origin.name}
-              location={character.location.name}
-            />
-          ))}
+          {characters.map(
+            (character: Character, index: number): JSX.Element => (
+              <CharacterEl
+                key={character.id}
+                id={character.id}
+                index={index}
+                name={character.name}
+                status={character.status}
+                gender={character.gender}
+                species={character.species}
+                image={character.image}
+                origin={character.origin.name}
+                location={character.location.name}
+              />
+            ),
+          )}
         </div>
       )}
     </div>

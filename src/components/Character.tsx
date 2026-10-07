@@ -2,6 +2,7 @@ import type { JSX } from "react";
 
 export type CharacterProps = {
   id: number;
+  index: number;
   image: string;
   status: string;
   gender: string;
@@ -14,6 +15,7 @@ export type CharacterProps = {
 export default function Character({
   id,
   image,
+  index,
   status,
   gender,
   name,
@@ -22,12 +24,13 @@ export default function Character({
   location,
 }: CharacterProps): JSX.Element {
   return (
-    <article className="aspect-3/5 w-75 min-w-0 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
-      <div className="relative size-75 w-full min-w-0 border-b-2 border-neutral-800">
+    <article className="aspect-3/5 w-75 justify-self-center overflow-hidden rounded-lg ring-2 ring-neutral-800 transition-all duration-200 ease-linear hover:scale-101">
+      <div className="relative aspect-square size-75 border-b-2 border-neutral-800">
         <img
           src={image}
-          loading="lazy"
           alt={`${name}'s portrait image`}
+          loading={index < 4 ? "eager" : "lazy"}
+          fetchPriority={index === 1 ? "high" : "auto"}
           className="size-full object-cover"
         />
 
@@ -46,7 +49,7 @@ export default function Character({
         </span>
       </div>
       <div className="flex flex-col items-center px-2 pt-4 pb-1 text-center">
-        <h3 className="line-clamp-2 text-xl font-medium" title={name}>
+        <h3 className="line-clamp-2 text-xl font-bold" title={name}>
           {name}
         </h3>
         <span>{species}</span>
