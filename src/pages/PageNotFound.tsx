@@ -11,7 +11,7 @@ export default function PageNotFound(): JSX.Element {
 
   return (
     <section className="flex flex-1 flex-col items-center justify-center text-center sm:max-w-xl md:text-lg">
-      <h1 className="text-2xl font-medium">Page not found</h1>
+      <h1 className="text-2xl font-bold">Page not found</h1>
       <p>
         It looks like you jumped into the wrong portal, mortal. This page does
         not exist in any of the known dimensions of the Multiverse.

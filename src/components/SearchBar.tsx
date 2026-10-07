@@ -23,7 +23,7 @@ export default function SearchBar({
         setError(null);
       }}
       onSubmit={handleSearch}
-      className="relative mx-auto flex h-8 w-full gap-3 mb-6 md:w-2xl"
+      className="relative mx-auto mb-4 flex h-8 w-full gap-3 md:mb-6 md:w-2xl"
     >
       <div className="relative h-full w-full">
         <Search

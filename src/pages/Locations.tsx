@@ -62,7 +62,7 @@ export function LocationCard({
 
   return (
     <div className="flex flex-1 flex-col items-center gap-4 text-center">
-      <h2 className="text-lg font-medium">
+      <h2 className="text-lg font-bold">
         {location.name}: {location.type}
       </h2>
 

@@ -35,8 +35,8 @@ export default function Home(): JSX.Element {
     },
   ];
   return (
-    <section className="flex flex-1 flex-col justify-center gap-6 text-center lg:text-lg">
-      <h1 className="text-2xl font-medium md:text-3xl">
+    <section className="flex flex-1 flex-col justify-center gap-2 md:gap-6 text-center lg:text-lg">
+      <h1 className="text-xl font-bold md:text-2xl">
         Welcome to the Rick and Morty Wiki!
       </h1>
       <div className="flex flex-col justify-between gap-6 lg:flex-row lg:gap-10">
